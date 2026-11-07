@@ -13,7 +13,7 @@ the bridge and drive to the red goal on the other bank.
 You need [uv](https://docs.astral.sh/uv/). Then:
 
 ```
-uv tool install git+https://github.com/GITHUB_USER/robot-world.git#subdirectory=packages/robot-world
+uv tool install git+https://github.com/davidnorman314/robot-world.git#subdirectory=packages/robot-world
 ```
 
 That gives you the `robot-world` command.

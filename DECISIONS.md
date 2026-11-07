@@ -72,8 +72,7 @@ a 3 m river, a 3 m wide bridge deck with 2 m ramps, a 2 x 2 m goal, and a 180 s 
 
 Hatchling refuses a direct git URL in `project.dependencies`. The template declares a
 plain `robot-api` dependency and points `[tool.uv.sources]` at the repo's
-`packages/robot-api` subdirectory. The GitHub user in that URL is a `GITHUB_USER`
-placeholder until David gives the real one.
+`packages/robot-api` subdirectory.
 
 ## 12. The example robot is a regression test for the world - proposed
 
