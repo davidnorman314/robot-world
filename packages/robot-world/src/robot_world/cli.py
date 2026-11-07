@@ -7,6 +7,7 @@ from pathlib import Path
 
 from robot_world.loader import ProgramLoadError, load_program
 from robot_world.remote import run_wheel
+from robot_world.server import serve
 from robot_world.worlds import WORLDS
 
 
@@ -30,6 +31,17 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument("wheel", type=Path)
 
     commands.add_parser("worlds", help="list the available worlds")
+
+    viewer = commands.add_parser("serve", help="open the browser viewer")
+    viewer.add_argument(
+        "wheel",
+        type=Path,
+        nargs="?",
+        help="the robot program's .whl file, or a folder to take the newest .whl from",
+    )
+    viewer.add_argument("--world", default="river", choices=sorted(WORLDS), help="which world")
+    viewer.add_argument("--port", type=int, default=8000, help="port to listen on")
+    viewer.add_argument("--no-browser", action="store_true", help="do not open a browser")
     return parser
 
 
@@ -66,9 +78,19 @@ def worlds_command(args: argparse.Namespace) -> int:
     return 0
 
 
+def serve_command(args: argparse.Namespace) -> int:
+    serve(args.wheel, world=args.world, port=args.port, open_browser=not args.no_browser)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    handlers = {"run": run_command, "check": check_command, "worlds": worlds_command}
+    handlers = {
+        "run": run_command,
+        "check": check_command,
+        "worlds": worlds_command,
+        "serve": serve_command,
+    }
     return handlers[args.command](args)
 
 
