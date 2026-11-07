@@ -8,7 +8,7 @@ dependencies = ["robot-api"]
 # Where to get robot-api from: the packages/robot-api folder of the robot-world repo,
 # at the release tag David gave you. Change the tag only when he says to.
 [tool.uv.sources]
-robot-api = { git = "https://github.com/davidnorman314/robot-world.git", subdirectory = "packages/robot-api", tag = "v0.1.0" }
+robot-api = { git = "https://github.com/davidnorman314/robot-world.git", subdirectory = "packages/robot-api", tag = "v0.2.0" }
 
 # This is how robot-world finds your robot inside the wheel. Keep exactly one entry.
 [project.entry-points."robot_world.robots"]

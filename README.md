@@ -20,7 +20,7 @@ The worlds so far:
 You need [uv](https://docs.astral.sh/uv/). Then install the simulator at a release tag:
 
 ```
-uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.1.0#subdirectory=packages/robot-world"
+uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
 ```
 
 That gives you the `robot-world` command. To move to a newer release, run the same
