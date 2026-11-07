@@ -28,3 +28,14 @@ def episode_to_dict(world: World, result: EpisodeResult) -> dict[str, Any]:
         ],
         "messages": [[frame, text] for frame, text in recording.messages],
     }
+
+
+def episode_summary(seed: int, result: EpisodeResult) -> dict[str, Any]:
+    """One row of a batch run: the verdict for ``seed``, with no frames or pictures."""
+    return {
+        "seed": seed,
+        "outcome": result.outcome.value,
+        "time": result.time,
+        "error": result.error,
+        "messages": [text for _, text in result.recording.messages],
+    }

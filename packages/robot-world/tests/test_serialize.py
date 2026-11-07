@@ -88,3 +88,23 @@ def test_episode_to_dict_includes_error_text(goal_ahead_world):
     data = episode_to_dict(goal_ahead_world, run_program(goal_ahead_world, program))
     assert data["outcome"] == "error"
     assert "RuntimeError: bang" in data["error"]
+
+
+def test_episode_summary_has_the_verdict_but_no_frames_or_pictures(goal_ahead_world):
+    from robot_world.runner import run_program
+    from robot_world.serialize import episode_summary
+
+    def program(robot):
+        robot.say("hello")
+        robot.look()
+        robot.forward(10.0)
+
+    result = run_program(goal_ahead_world, program)
+    summary = episode_summary(7, result)
+    assert summary == {
+        "seed": 7,
+        "outcome": "success",
+        "time": result.time,
+        "error": None,
+        "messages": ["hello"],
+    }

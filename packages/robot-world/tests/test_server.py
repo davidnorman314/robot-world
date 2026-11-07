@@ -118,3 +118,37 @@ def test_model_loader_and_rover_model_are_served(client):
 def test_config_includes_world_descriptions(client):
     data = client.get("/api/config").json()
     assert "bridge" in data["descriptions"]["one-bridge"]
+
+
+def test_batch_streams_one_summary_per_seed(client, goal_wheel, test_world):
+    import json
+
+    with client.stream(
+        "POST",
+        "/api/batch",
+        json={"wheel": str(goal_wheel), "world": "test", "seed": 3, "episodes": 2},
+    ) as response:
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("application/x-ndjson")
+        lines = [json.loads(line) for line in response.iter_lines() if line.strip()]
+    assert sorted(line["seed"] for line in lines) == [3, 4]
+    for line in lines:
+        assert line["outcome"] == "success"
+        assert line["messages"] == ["go"]
+        assert "frames" not in line
+
+
+def test_batch_with_an_unknown_world_is_a_client_error(client, goal_wheel):
+    response = client.post(
+        "/api/batch", json={"wheel": str(goal_wheel), "world": "moon", "seed": 1, "episodes": 2}
+    )
+    assert response.status_code == 400
+    assert "moon" in response.json()["detail"]
+
+
+def test_batch_with_a_missing_wheel_is_a_client_error(client, tmp_path, test_world):
+    response = client.post(
+        "/api/batch",
+        json={"wheel": str(tmp_path / "nope.whl"), "world": "test", "seed": 1, "episodes": 2},
+    )
+    assert response.status_code == 400
