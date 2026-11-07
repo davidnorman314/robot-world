@@ -3,6 +3,15 @@
 A robot program for [robot-world](../../README.md). It crosses the river by the bridge
 and drives to the red goal. Copy this folder to start your own robot.
 
+## Set it up
+
+`pyproject.toml` points at a release tag of robot-world (`tag = "v0.1.0"`). Use the tag
+David gave you, and change it only when he says there is a new one. Then:
+
+```
+uv sync
+```
+
 ## Build it
 
 ```

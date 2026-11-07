@@ -10,13 +10,14 @@ the bridge and drive to the red goal on the other bank.
 
 ## Install
 
-You need [uv](https://docs.astral.sh/uv/). Then:
+You need [uv](https://docs.astral.sh/uv/). Then install the simulator at a release tag:
 
 ```
-uv tool install git+https://github.com/davidnorman314/robot-world.git#subdirectory=packages/robot-world
+uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.1.0#subdirectory=packages/robot-world"
 ```
 
-That gives you the `robot-world` command.
+That gives you the `robot-world` command. To move to a newer release, run the same
+command with the new tag. Releases are listed on the GitHub tags page.
 
 ## Write a robot
 
@@ -68,5 +69,12 @@ The repo is a uv workspace:
 - `packages/robot-world` is the simulator: world model, world generators, camera,
   simulation, wheel loading and the CLI.
 - `examples/river-bot` is an example robot that solves the river world.
+
+## Release
+
+Releases are git tags named `vX.Y.Z`. A robot project pins `robot-api` to a tag, and the
+simulator is installed from a tag, so work on `master` never disturbs a robot that stays
+on its tag. To cut a release: set the same version in both `packages/*/pyproject.toml`,
+commit, then `git tag vX.Y.Z` and `git push --tags`.
 
 Design decisions are recorded in [DECISIONS.md](DECISIONS.md).

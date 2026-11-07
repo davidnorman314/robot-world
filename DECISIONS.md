@@ -68,13 +68,19 @@ about it; the viewer can upscale it.
 Speed 1 m/s, turn 90 degrees/s, radius 0.3 m, tick 0.05 s. River world is 24 x 20 m with
 a 3 m river, a 3 m wide bridge deck with 2 m ramps, a 2 x 2 m goal, and a 180 s time limit.
 
-## 11. Example robot depends on robot-api through `[tool.uv.sources]` - proposed
+## 11. Example robot depends on robot-api through `[tool.uv.sources]` - accepted
 
 Hatchling refuses a direct git URL in `project.dependencies`. The template declares a
 plain `robot-api` dependency and points `[tool.uv.sources]` at the repo's
-`packages/robot-api` subdirectory.
+`packages/robot-api` subdirectory, pinned to a release tag.
 
-## 12. The example robot is a regression test for the world - proposed
+## 13. Releases are git tags, no PyPI - accepted
+
+Tags are named `vX.Y.Z`. She pins `robot-api` and installs the simulator at a tag David
+gives her, and stays there until he says to update, so he can keep working on `master`.
+Both packages carry the same version as the tag.
+
+## 12. The example robot is a regression test for the world - accepted
 
 `test_example_river_bot.py` runs the example on 20 seeds in-process (a 200-seed sweep
 passed when it was written). If a world change breaks it, the world has become harder,
