@@ -42,9 +42,11 @@ If `uv sync` was run before a package's source existed, reinstall it with
 Releases are git tags `vX.Y.Z`. Her robot project pins `robot-api` to a tag and she
 installs the simulator from a tag, so `master` can move freely. When David asks for a
 release: set the same version in `packages/robot-api/pyproject.toml` and
-`packages/robot-world/pyproject.toml`, commit, and tell him the tag to create. David
-creates and pushes tags himself. Breaking changes to `robot_api` need a minor version
-bump and a note in the release so she knows what to change.
+`packages/robot-world/pyproject.toml`, commit, and create the tag. Claude creates tags;
+David pushes them. Ask David whether to cut a release at natural points, such as when a
+feature she would use is complete, but never tag without being asked. Breaking changes
+to `robot_api` need a minor version bump and a note in the release so she knows what to
+change.
 
 ## Design rules
 
