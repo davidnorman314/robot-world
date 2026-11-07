@@ -92,4 +92,10 @@ simulator is installed from a tag, so work on `master` never disturbs a robot th
 on its tag. To cut a release: set the same version in both `packages/*/pyproject.toml`,
 commit, then `git tag vX.Y.Z` and `git push --tags`.
 
+## Credits
+
+The robot is the Round Rover from Quaternius's Ultimate Space Kit (CC0). Model credits
+are listed in `packages/robot-world/src/robot_world/static/models/ATTRIBUTION.md`. The
+viewer uses [three.js](https://threejs.org) (MIT), vendored under `static/vendor/`.
+
 Design decisions are recorded in [DECISIONS.md](DECISIONS.md).

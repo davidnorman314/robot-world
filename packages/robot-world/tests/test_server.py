@@ -105,3 +105,11 @@ def test_newest_wheel_picks_the_most_recently_modified(tmp_path):
 
 def test_newest_wheel_in_an_empty_directory_is_none(tmp_path):
     assert newest_wheel(tmp_path) is None
+
+
+def test_model_loader_and_rover_model_are_served(client):
+    assert client.get("/static/vendor/loaders/GLTFLoader.js").status_code == 200
+    assert client.get("/static/vendor/utils/BufferGeometryUtils.js").status_code == 200
+    rover = client.get("/static/models/round-rover.glb")
+    assert rover.status_code == 200
+    assert rover.content[:4] == b"glTF"

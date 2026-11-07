@@ -85,3 +85,11 @@ which should be a deliberate curriculum step, not an accident.
 Tags are named `vX.Y.Z`. She pins `robot-api` and installs the simulator at a tag David
 gives her, and stays there until he says to update, so he can keep working on `master`.
 Both packages carry the same version as the tag.
+
+## 14. 3D models come from CC0 packs and are vendored - accepted
+
+The robot is Quaternius's Round Rover (Ultimate Space Kit, CC0), chosen by David. Model
+files live under `static/models/` with their credits in `ATTRIBUTION.md` there, so the
+viewer works offline and installs from the repo need nothing else. Models are
+normalised at load time (measured, scaled to robot size, converted to z-up, set on the
+ground) rather than hand-tuned, so swapping a model is a one-line change.

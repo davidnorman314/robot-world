@@ -5,6 +5,7 @@
 
 import * as THREE from "three";
 import { OrbitControls } from "./vendor/OrbitControls.js";
+import { GLTFLoader } from "./vendor/loaders/GLTFLoader.js";
 
 // Display colors. Same hues as the robot's flat palette so she can relate the two views.
 const TERRAIN_COLORS = {
@@ -14,6 +15,14 @@ const TERRAIN_COLORS = {
   goal: 0xe63c3c,
 };
 const SKY = 0x87ceeb;
+
+// The robot model (see models/ATTRIBUTION.md). It is scaled so its longer horizontal
+// side is ROBOT_LENGTH meters; the simulator's robot is a circle of radius 0.3 m.
+const ROBOT_MODEL = "/static/models/round-rover.glb";
+const ROBOT_LENGTH = 0.8;
+// The model's own forward direction after conversion to z-up, as a rotation about z.
+// Change to Math.PI if the rover turns out to drive backwards.
+const ROBOT_MODEL_FORWARD = 0;
 
 // Camera parameters that match robot_world.camera.Camera's defaults.
 const EYE_HEIGHT = 0.6;
@@ -73,6 +82,7 @@ let worldGroup = new THREE.Group();
 scene.add(worldGroup);
 const robot = buildRobot();
 scene.add(robot);
+loadRobotModel();
 
 const cameras = {
   top: new THREE.PerspectiveCamera(50, 1, 0.1, 500),
@@ -172,6 +182,44 @@ function buildWorld(world) {
   shadow.updateProjectionMatrix();
 
   resetOverview(world);
+}
+
+function loadRobotModel() {
+  // Replace the placeholder primitives with the glTF rover once it has loaded.
+  new GLTFLoader().load(
+    ROBOT_MODEL,
+    (gltf) => {
+      const model = gltf.scene;
+      model.traverse((node) => {
+        if (node.isMesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      // glTF is y-up; the world is z-up. Wrap the model so its y becomes our z.
+      const wrapper = new THREE.Group();
+      wrapper.rotation.x = Math.PI / 2;
+      wrapper.add(model);
+      const holder = new THREE.Group();
+      holder.add(wrapper);
+      holder.updateMatrixWorld(true);
+      const box = new THREE.Box3().setFromObject(holder);
+      const size = box.getSize(new THREE.Vector3());
+      const scale = ROBOT_LENGTH / Math.max(size.x, size.y);
+      holder.scale.setScalar(scale);
+      holder.updateMatrixWorld(true);
+      box.setFromObject(holder);
+      const center = box.getCenter(new THREE.Vector3());
+      holder.position.set(-center.x, -center.y, -box.min.z);
+      const oriented = new THREE.Group();
+      oriented.rotation.z = ROBOT_MODEL_FORWARD;
+      oriented.add(holder);
+      robot.clear();
+      robot.add(oriented);
+    },
+    undefined,
+    (error) => console.warn("Could not load the robot model; keeping the placeholder.", error),
+  );
 }
 
 function buildRobot() {
