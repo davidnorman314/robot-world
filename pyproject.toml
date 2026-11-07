@@ -33,6 +33,7 @@ select = ["E", "F", "I", "UP", "B", "SIM", "N", "W"]
 
 [tool.pytest.ini_options]
 testpaths = ["packages/robot-api/tests", "packages/robot-world/tests"]
+markers = ["slow: spawns subprocesses; deselect with -m 'not slow'"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["robot_api", "robot_world"]
