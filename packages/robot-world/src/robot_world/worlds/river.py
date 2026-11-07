@@ -9,7 +9,7 @@ WIDTH = 24.0
 HEIGHT = 20.0
 RIVER_WIDTH = 3.0
 BRIDGE_WIDTH = 3.0  # across the deck, north to south
-RAMP_LENGTH = 1.5  # how far the deck continues onto each bank, with no railing
+RAMP_LENGTH = 2.0  # how far the deck continues onto each bank, with no railing
 RAIL_THICKNESS = 0.2
 RAIL_HEIGHT = 0.6
 WALL_THICKNESS = 0.3
@@ -63,7 +63,7 @@ def make_river_world(seed: int) -> World:
             Patch(goal, Terrain.GOAL),
         ),
         boxes=(
-            *(Box(rail, RAIL_HEIGHT, Colors.BRIDGE) for rail in rails),
+            *(Box(rail, RAIL_HEIGHT, Colors.RAILING) for rail in rails),
             *(Box(wall, WALL_HEIGHT, Colors.WALL) for wall in walls),
             Box(goal_post, GOAL_POST_HEIGHT, Colors.GOAL, solid=False),
         ),

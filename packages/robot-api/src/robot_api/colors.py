@@ -22,6 +22,7 @@ class Colors:
     LAND = Color(96, 160, 64)
     WATER = Color(40, 90, 200)
     BRIDGE = Color(150, 100, 50)
+    RAILING = Color(235, 225, 200)
     GOAL = Color(230, 60, 60)
     WALL = Color(120, 120, 120)
     ROCK = Color(80, 70, 60)

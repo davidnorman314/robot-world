@@ -1,3 +1,4 @@
+from robot_api import Colors
 from robot_world.world import Terrain
 from robot_world.worlds.river import make_river_world
 
@@ -37,8 +38,8 @@ def test_bridge_spans_the_river():
         ]
         assert bridge_rows, f"seed {seed} has no bridge"
         y = bridge_rows[len(bridge_rows) // 2]
-        assert world.terrain_at(left - 1.7, y) is Terrain.LAND  # the ramp overhangs the bank by 1.5
-        assert world.terrain_at(right + 1.8, y) is Terrain.LAND
+        assert world.terrain_at(left - 2.2, y) is Terrain.LAND  # the ramp overhangs the bank by 2.0
+        assert world.terrain_at(right + 2.3, y) is Terrain.LAND
         for x in (left, (left + right) / 2, right):
             assert world.terrain_at(x, y) is Terrain.BRIDGE
 
@@ -68,6 +69,8 @@ def test_bridge_has_railings_on_both_sides():
     assert world.is_blocked(mid_x, bridge.y0 - 0.05, 0.1)
     assert world.is_blocked(mid_x, bridge.y1 + 0.05, 0.1)
     assert not world.is_blocked(mid_x, bridge.center[1], 0.3)
+    railings = [box for box in world.boxes if box.color == Colors.RAILING]
+    assert len(railings) == 2
 
 
 def test_ramps_on_each_bank_have_no_railings():
