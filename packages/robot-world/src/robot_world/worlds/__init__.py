@@ -8,10 +8,10 @@ import inspect
 from collections.abc import Callable
 
 from robot_world.world import World
-from robot_world.worlds.river import make_river_world
+from robot_world.worlds.one_bridge import make_one_bridge_world
 
 WORLDS: dict[str, Callable[[int], World]] = {
-    "river": make_river_world,
+    "one-bridge": make_one_bridge_world,
 }
 
 

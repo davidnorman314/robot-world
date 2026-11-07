@@ -18,7 +18,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     run = commands.add_parser("run", help="run a robot program through one or more episodes")
     run.add_argument("wheel", type=Path, help="the robot program's .whl file")
-    run.add_argument("--world", default="river", choices=sorted(WORLDS), help="which world")
+    run.add_argument("--world", default="one-bridge", choices=sorted(WORLDS), help="which world")
     run.add_argument("--seed", type=int, default=1, help="seed of the first episode")
     run.add_argument("--episodes", type=int, default=1, help="how many seeds to run, in order")
     run.add_argument(
@@ -40,7 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
         nargs="?",
         help="the robot program's .whl file, or a folder to take the newest .whl from",
     )
-    viewer.add_argument("--world", default="river", choices=sorted(WORLDS), help="which world")
+    viewer.add_argument("--world", default="one-bridge", choices=sorted(WORLDS), help="which world")
     viewer.add_argument("--port", type=int, default=8035, help="port to listen on")
     viewer.add_argument("--no-browser", action="store_true", help="do not open a browser")
     return parser

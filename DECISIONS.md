@@ -65,7 +65,7 @@ about it; the viewer can upscale it.
 
 ## 10. Robot motion constants - accepted
 
-Speed 1 m/s, turn 90 degrees/s, radius 0.3 m, tick 0.05 s. River world is 24 x 20 m with
+Speed 1 m/s, turn 90 degrees/s, radius 0.3 m, tick 0.05 s. The one-bridge world is 24 x 20 m with
 a 3 m river, a 3 m wide bridge deck with 2 m ramps, a 2 x 2 m goal, and a 180 s time limit.
 
 ## 11. Example robot depends on robot-api through `[tool.uv.sources]` - accepted

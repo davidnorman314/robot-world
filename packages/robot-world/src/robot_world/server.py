@@ -40,7 +40,7 @@ class RunRequest(BaseModel):
     timeout: float = 30.0
 
 
-def build_app(default_wheel: Path | None = None, default_world: str = "river") -> FastAPI:
+def build_app(default_wheel: Path | None = None, default_world: str = "one-bridge") -> FastAPI:
     app = FastAPI(title="robot-world")
     app.mount("/static", StaticFiles(directory=STATIC), name="static")
 
@@ -73,7 +73,7 @@ def build_app(default_wheel: Path | None = None, default_world: str = "river") -
 
 def serve(
     wheel: Path | None,
-    world: str = "river",
+    world: str = "one-bridge",
     port: int = 8035,
     open_browser: bool = True,
 ) -> None:

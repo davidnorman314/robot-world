@@ -20,7 +20,7 @@ GOAL_POST_HEIGHT = 1.5
 TIME_LIMIT = 180.0
 
 
-def make_river_world(seed: int) -> World:
+def make_one_bridge_world(seed: int) -> World:
     """A river runs north to south across the middle of a fenced field, and the only
     way over it is a wooden bridge with railings. Your robot starts somewhere on the
     west bank, facing a random direction. Find the bridge, cross it, and drive onto the
@@ -59,7 +59,7 @@ def make_river_world(seed: int) -> World:
     )
 
     return World(
-        name=f"river-{seed}",
+        name=f"one-bridge-{seed}",
         width=WIDTH,
         height=HEIGHT,
         patches=(

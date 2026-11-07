@@ -83,7 +83,7 @@ The repo is a uv workspace:
 - `packages/robot-world` is the simulator: world model, world generators, camera,
   simulation, wheel loading, the CLI, and the browser viewer (a FastAPI server plus a
   vanilla three.js page in `static/`, with three.js vendored so there is no Node build).
-- `examples/river-bot` is an example robot that solves the river world.
+- `examples/river-bot` is an example robot that solves the one-bridge world.
 
 ## Release
 

@@ -38,7 +38,7 @@ def test_vendored_three_js_is_served(client):
 
 def test_config_reports_worlds_and_default_wheel(client, goal_wheel, test_world):
     data = client.get("/api/config").json()
-    assert "river" in data["worlds"]
+    assert "one-bridge" in data["worlds"]
     assert "test" in data["worlds"]
     assert data["wheel"] == str(goal_wheel)
 
@@ -117,4 +117,4 @@ def test_model_loader_and_rover_model_are_served(client):
 
 def test_config_includes_world_descriptions(client):
     data = client.get("/api/config").json()
-    assert "bridge" in data["descriptions"]["river"]
+    assert "bridge" in data["descriptions"]["one-bridge"]

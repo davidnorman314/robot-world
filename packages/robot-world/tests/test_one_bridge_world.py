@@ -1,6 +1,6 @@
 from robot_api import Colors
 from robot_world.world import Terrain
-from robot_world.worlds.river import make_river_world
+from robot_world.worlds.one_bridge import make_one_bridge_world
 
 
 def river_columns(world):
@@ -11,16 +11,16 @@ def river_columns(world):
 
 
 def test_same_seed_gives_same_world():
-    assert make_river_world(7) == make_river_world(7)
+    assert make_one_bridge_world(7) == make_one_bridge_world(7)
 
 
 def test_different_seeds_give_different_worlds():
-    worlds = {make_river_world(seed) for seed in range(10)}
+    worlds = {make_one_bridge_world(seed) for seed in range(10)}
     assert len(worlds) > 1
 
 
 def test_river_runs_the_full_height_of_the_world():
-    world = make_river_world(3)
+    world = make_one_bridge_world(3)
     left, right = river_columns(world)
     for y in (0.5, world.height / 2, world.height - 0.5):
         column = world.terrain_at((left + right) / 2, y)
@@ -29,7 +29,7 @@ def test_river_runs_the_full_height_of_the_world():
 
 def test_bridge_spans_the_river():
     for seed in range(20):
-        world = make_river_world(seed)
+        world = make_one_bridge_world(seed)
         left, right = river_columns(world)
         bridge_rows = [
             y / 10
@@ -46,7 +46,7 @@ def test_bridge_spans_the_river():
 
 def test_robot_starts_on_land_west_of_the_river_and_goal_is_east():
     for seed in range(20):
-        world = make_river_world(seed)
+        world = make_one_bridge_world(seed)
         left, right = river_columns(world)
         assert world.terrain_at(world.start.x, world.start.y) is Terrain.LAND
         assert world.start.x < left
@@ -57,13 +57,13 @@ def test_robot_starts_on_land_west_of_the_river_and_goal_is_east():
 
 
 def test_world_is_fenced_in_by_walls():
-    world = make_river_world(1)
+    world = make_one_bridge_world(1)
     assert world.is_blocked(0.1, world.height / 2, 0.3)
     assert world.is_blocked(world.width - 0.1, world.height / 2, 0.3)
 
 
 def test_bridge_has_railings_on_both_sides():
-    world = make_river_world(1)
+    world = make_one_bridge_world(1)
     bridge = next(p.rect for p in world.patches if p.terrain is Terrain.BRIDGE)
     mid_x = bridge.center[0]
     assert world.is_blocked(mid_x, bridge.y0 - 0.05, 0.1)
@@ -74,7 +74,7 @@ def test_bridge_has_railings_on_both_sides():
 
 
 def test_ramps_on_each_bank_have_no_railings():
-    world = make_river_world(1)
+    world = make_one_bridge_world(1)
     bridge = next(p.rect for p in world.patches if p.terrain is Terrain.BRIDGE)
     left, right = river_columns(world)
     for x in (bridge.x0 + 0.3, left - 0.3, right + 0.4, bridge.x1 - 0.3):
@@ -84,7 +84,7 @@ def test_ramps_on_each_bank_have_no_railings():
 
 
 def test_bridge_deck_is_wide_enough_to_drive_down_the_middle_with_margin():
-    world = make_river_world(1)
+    world = make_one_bridge_world(1)
     bridge = next(p.rect for p in world.patches if p.terrain is Terrain.BRIDGE)
     assert bridge.height >= 3.0
     mid_x = bridge.center[0]
@@ -92,10 +92,10 @@ def test_bridge_deck_is_wide_enough_to_drive_down_the_middle_with_margin():
         assert not world.is_blocked(mid_x, bridge.center[1] + dy, 0.3)
 
 
-def test_river_world_has_a_player_facing_description():
+def test_one_bridge_world_has_a_player_facing_description():
     from robot_world.worlds import world_description
 
-    description = world_description("river")
+    description = world_description("one-bridge")
     assert "bridge" in description
     assert "goal" in description
     assert len(description) < 600
