@@ -90,32 +90,40 @@ class Simulation:
         """
         self.bumped = False
         direction = 1.0 if distance >= 0 else -1.0
-        remaining = abs(distance)
+        total = abs(distance)
         moved = 0.0
-        heading = math.radians(self.pose.heading)
-        while remaining > 1e-9 and not self.outcome.is_over:
-            step = min(self.speed * self.dt, remaining)
-            x = self.pose.x + direction * step * math.cos(heading)
-            y = self.pose.y + direction * step * math.sin(heading)
+        ticks = 0
+        start = self.pose
+        heading = math.radians(start.heading)
+        # Each tick's position is computed from the start pose and the tick count
+        # rather than accumulated, so rounding errors do not build up over a long move.
+        while total - moved > 1e-9 and not self.outcome.is_over:
+            ticks += 1
+            next_moved = min(total, ticks * self.speed * self.dt)
+            x = start.x + direction * next_moved * math.cos(heading)
+            y = start.y + direction * next_moved * math.sin(heading)
             if self.world.is_blocked(x, y, self.robot_radius):
                 self.bumped = True
                 break
-            self.pose = Pose(x, y, self.pose.heading)
-            moved += step
-            remaining -= step
-            self._advance(step / self.speed)
+            self.pose = Pose(x, y, start.heading)
+            self._advance((next_moved - moved) / self.speed)
+            moved = next_moved
         return direction * moved
 
     def turn(self, degrees: float) -> None:
         """Turn on the spot. Positive is left (counter-clockwise)."""
         direction = 1.0 if degrees >= 0 else -1.0
-        remaining = abs(degrees)
-        while remaining > 1e-9 and not self.outcome.is_over:
-            step = min(self.turn_speed * self.dt, remaining)
-            heading = (self.pose.heading + direction * step) % 360.0
-            self.pose = Pose(self.pose.x, self.pose.y, heading)
-            remaining -= step
-            self._advance(step / self.turn_speed)
+        total = abs(degrees)
+        turned = 0.0
+        ticks = 0
+        start = self.pose
+        while total - turned > 1e-9 and not self.outcome.is_over:
+            ticks += 1
+            next_turned = min(total, ticks * self.turn_speed * self.dt)
+            heading = (start.heading + direction * next_turned) % 360.0
+            self.pose = Pose(start.x, start.y, heading)
+            self._advance((next_turned - turned) / self.turn_speed)
+            turned = next_turned
 
     def look(self) -> np.ndarray:
         """Render the camera view, which takes ``look_time`` seconds."""
