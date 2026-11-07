@@ -51,8 +51,8 @@
   button.active { border-color: var(--accent); color: var(--accent); }
   main { flex: 1; display: flex; min-height: 0; }
   #view-column { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  #view { flex: 1; min-height: 0; position: relative; }
-  #view canvas { display: block; }
+  #view { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+  #view canvas { display: block; width: 100% !important; height: 100% !important; }
   #banner {
     position: absolute; top: 12px; left: 12px;
     padding: 6px 12px; border-radius: 6px;

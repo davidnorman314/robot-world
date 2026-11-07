@@ -117,7 +117,9 @@ function resize() {
   cameras.first.aspect = aspect;
   cameras.first.updateProjectionMatrix();
 }
-window.addEventListener("resize", resize);
+// Re-measure whenever the container changes size, not just on window resize: at load
+// the layout can settle after the first measurement, which left a stale canvas size.
+new ResizeObserver(resize).observe(ui.view);
 
 function resetOverview(world) {
   // High above the middle of the world, tilted just enough that north is up on screen.
