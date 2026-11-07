@@ -7,20 +7,20 @@ watches how her robot does, and iterates. Worlds get harder over time as her ski
 
 ## Layout
 
-- `packages/robot-api` — `robot_api`, the only package a robot program imports. Keep it
+- `packages/robot-api` - `robot_api`, the only package a robot program imports. Keep it
   small, pure Python, and documented well enough that Claude Code can write a robot from
   the docstrings alone. Changing it is an API change for her code.
-- `packages/robot-world` — `robot_world`, the simulator: world model, world generators,
+- `packages/robot-world` - `robot_world`, the simulator: world model, world generators,
   camera, simulation, wheel loading, CLI, and (later) the browser viewer.
-- `examples/` — example robot projects; `river-bot` doubles as her template.
-- `DECISIONS.md` — design decisions Claude makes that David should review.
+- `examples/` - example robot projects; `river-bot` doubles as her template.
+- `DECISIONS.md` - design decisions Claude makes that David should review.
 
 ## Commands
 
-- `uv sync` — create or update `.venv` (Python 3.12).
-- `uv run pytest` — all tests.
-- `uv run ruff check . && uv run ruff format .` — lint and format.
-- `uv run robot-world --help` — the simulator CLI.
+- `uv sync` - create or update `.venv` (Python 3.12).
+- `uv run pytest` - all tests.
+- `uv run ruff check . && uv run ruff format .` - lint and format.
+- `uv run robot-world --help` - the simulator CLI.
 
 If `uv sync` was run before a package's source existed, reinstall it with
 `uv sync --reinstall-package <name>` or imports fail.
@@ -34,6 +34,7 @@ If `uv sync` was run before a package's source existed, reinstall it with
 - Trunk-based: commit to `master`, no feature branches.
 - Pause and ask David when a decision needs his input. Record decisions he should review
   in `DECISIONS.md` as they are made.
+- Keep `README.md` current with every change to commands, the robot API or the layout.
 - Never use `from __future__ import annotations`.
 
 ## Design rules
@@ -45,3 +46,5 @@ If `uv sync` was run before a package's source existed, reinstall it with
   `look`, `heading`, `say`. The episode ends on its own (goal, water, timeout).
 - Robot programs are pure-Python wheels exposing a `run(robot)` entry point in the
   `robot_world.robots` group. They run in a subprocess.
+- Everything the robot can see has its own color in `Colors`. Never give two different
+  kinds of thing the same color; a robot program tells them apart only by color.
