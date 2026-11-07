@@ -39,6 +39,7 @@ const ui = {
   error: document.getElementById("error"),
   view: document.getElementById("view"),
   viewButtons: Array.from(document.querySelectorAll(".view-button")),
+  resetView: document.getElementById("reset-view"),
 };
 
 const state = {
@@ -74,16 +75,15 @@ const robot = buildRobot();
 scene.add(robot);
 
 const cameras = {
-  top: new THREE.OrthographicCamera(-10, 10, 10, -10, 0.1, 200),
+  top: new THREE.PerspectiveCamera(50, 1, 0.1, 500),
   chase: new THREE.PerspectiveCamera(60, 1, 0.1, 200),
   first: new THREE.PerspectiveCamera(60, EYE_ASPECT, 0.05, 200),
-  orbit: new THREE.PerspectiveCamera(50, 1, 0.1, 500),
 };
 for (const camera of Object.values(cameras)) camera.up.set(0, 0, 1);
-// The top camera looks straight down z, so its "up" must be something else: north.
-cameras.top.up.set(0, 1, 0);
-const orbitControls = new OrbitControls(cameras.orbit, renderer.domElement);
-orbitControls.enabled = false;
+// The overview starts looking down on the world and can be rotated, zoomed and panned.
+const orbitControls = new OrbitControls(cameras.top, renderer.domElement);
+orbitControls.enableDamping = true;
+orbitControls.maxPolarAngle = Math.PI / 2 - 0.05; // never go below the ground
 
 // Vertical field of view of the robot's camera, from its horizontal FOV and aspect.
 cameras.first.fov = THREE.MathUtils.radToDeg(
@@ -97,34 +97,26 @@ function resize() {
   if (width === 0 || height === 0) return;
   renderer.setSize(width, height, false);
   const aspect = width / height;
-  for (const camera of [cameras.chase, cameras.orbit]) {
+  for (const camera of [cameras.top, cameras.chase]) {
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
   }
   // Letterbox the first-person view to the robot camera's aspect by adjusting fov.
   cameras.first.aspect = aspect;
   cameras.first.updateProjectionMatrix();
-  fitTopCamera();
 }
 window.addEventListener("resize", resize);
 
-function fitTopCamera() {
-  const episode = state.episode;
-  if (!episode) return;
-  const { width: ww, height: wh } = episode.world;
-  const aspect = ui.view.clientWidth / Math.max(1, ui.view.clientHeight);
-  let halfW = ww / 2 + 1;
-  let halfH = wh / 2 + 1;
-  if (halfW / halfH > aspect) halfH = halfW / aspect;
-  else halfW = halfH * aspect;
+function resetOverview(world) {
+  // High above the middle of the world, tilted just enough that north is up on screen.
   const camera = cameras.top;
-  camera.left = -halfW;
-  camera.right = halfW;
-  camera.top = halfH;
-  camera.bottom = -halfH;
-  camera.position.set(ww / 2, wh / 2, 60);
-  camera.lookAt(ww / 2, wh / 2, 0);
-  camera.updateProjectionMatrix();
+  const fov = THREE.MathUtils.degToRad(camera.fov);
+  const aspect = Math.max(0.5, camera.aspect);
+  const span = Math.max(world.height, world.width / aspect);
+  const distance = (span / 2 / Math.tan(fov / 2)) * 1.15;
+  camera.position.set(world.width / 2, world.height / 2 - distance * 0.12, distance);
+  orbitControls.target.set(world.width / 2, world.height / 2, 0);
+  orbitControls.update();
 }
 
 // --- building the scene from a world -------------------------------------------
@@ -179,10 +171,7 @@ function buildWorld(world) {
   shadow.far = 120;
   shadow.updateProjectionMatrix();
 
-  cameras.orbit.position.set(world.width / 2, -world.height * 0.6, world.height * 0.8);
-  orbitControls.target.set(world.width / 2, world.height / 2, 0);
-  orbitControls.update();
-  fitTopCamera();
+  resetOverview(world);
 }
 
 function buildRobot() {
@@ -306,7 +295,7 @@ function setPlaying(playing) {
 
 function setView(mode) {
   state.viewMode = mode;
-  orbitControls.enabled = mode === "orbit";
+  orbitControls.enabled = mode === "top";
   for (const button of ui.viewButtons) {
     button.classList.toggle("active", button.dataset.view === mode);
   }
@@ -317,7 +306,7 @@ function updateCamera() {
   const forward = new THREE.Vector3(Math.cos(heading), Math.sin(heading), 0);
   if (state.viewMode === "chase") {
     const camera = cameras.chase;
-    camera.position.copy(robot.position).addScaledVector(forward, -3.5).add(new THREE.Vector3(0, 0, 2));
+    camera.position.copy(robot.position).addScaledVector(forward, -4).add(new THREE.Vector3(0, 0, 2.5));
     camera.lookAt(robot.position.clone().addScaledVector(forward, 2).add(new THREE.Vector3(0, 0, 0.3)));
   } else if (state.viewMode === "first") {
     const camera = cameras.first;
@@ -329,7 +318,7 @@ function updateCamera() {
       Math.sin(pitch),
     );
     camera.lookAt(camera.position.clone().add(direction));
-  } else if (state.viewMode === "orbit") {
+  } else {
     orbitControls.update();
   }
 }
@@ -430,6 +419,7 @@ function showEpisode(episode) {
 // --- wiring ---------------------------------------------------------------------
 
 ui.run.addEventListener("click", runEpisode);
+ui.resetView.addEventListener("click", () => state.episode && resetOverview(state.episode.world));
 ui.play.addEventListener("click", () => setPlaying(!state.playing));
 ui.scrubber.addEventListener("input", () => {
   setPlaying(false);

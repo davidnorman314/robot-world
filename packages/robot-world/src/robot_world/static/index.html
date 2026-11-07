@@ -118,10 +118,10 @@
       <input id="scrubber" type="range" min="0" max="0" step="0.01" value="0" disabled>
       <span id="time">0.0 s</span>
       <span class="hint">View:</span>
-      <button class="view-button active" data-view="top">Top</button>
-      <button class="view-button" data-view="chase">Chase</button>
-      <button class="view-button" data-view="first">First person</button>
-      <button class="view-button" data-view="orbit">Orbit</button>
+      <button class="view-button active" data-view="top" title="Drag to rotate, wheel to zoom, right-drag to pan">Overview</button>
+      <button class="view-button" data-view="chase" title="Above and behind the robot">Behind robot</button>
+      <button class="view-button" data-view="first" title="Full-detail version of what the robot's camera sees">Robot camera</button>
+      <button id="reset-view" title="Put the overview back above the world">Reset</button>
     </div>
   </div>
   <aside>
