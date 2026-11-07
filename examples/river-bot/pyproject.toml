@@ -1,0 +1,21 @@
+[project]
+name = "river-bot"
+version = "0.1.0"
+description = "A robot that crosses the river by the bridge and drives to the red goal"
+requires-python = ">=3.12"
+dependencies = ["robot-api"]
+
+# Where to get robot-api from: the packages/robot-api folder of the robot-world repo.
+[tool.uv.sources]
+robot-api = { git = "https://github.com/GITHUB_USER/robot-world.git", subdirectory = "packages/robot-api" }
+
+# This is how robot-world finds your robot inside the wheel. Keep exactly one entry.
+[project.entry-points."robot_world.robots"]
+river-bot = "river_bot:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/river_bot"]
