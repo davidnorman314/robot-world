@@ -24,8 +24,8 @@ def make_river_world(seed: int) -> World:
     """A river runs north to south across the middle of a fenced field, and the only
     way over it is a wooden bridge with railings. Your robot starts somewhere on the
     west bank, facing a random direction. Find the bridge, cross it, and drive onto the
-    red square on the east bank. The red post in the middle of the square can be seen
-    from far away. Driving into the water ends the run."""
+    red goal square on the east bank. The red post in the middle of the goal can be
+    seen from far away. Driving into the water ends the run."""
     rng = random.Random(seed)
 
     river_x0 = rng.uniform(9.0, 13.0)
