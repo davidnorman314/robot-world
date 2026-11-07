@@ -40,7 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="the robot program's .whl file, or a folder to take the newest .whl from",
     )
     viewer.add_argument("--world", default="river", choices=sorted(WORLDS), help="which world")
-    viewer.add_argument("--port", type=int, default=8000, help="port to listen on")
+    viewer.add_argument("--port", type=int, default=8035, help="port to listen on")
     viewer.add_argument("--no-browser", action="store_true", help="do not open a browser")
     return parser
 

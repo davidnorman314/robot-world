@@ -73,7 +73,7 @@ def build_app(default_wheel: Path | None = None, default_world: str = "river") -
 def serve(
     wheel: Path | None,
     world: str = "river",
-    port: int = 8000,
+    port: int = 8035,
     open_browser: bool = True,
 ) -> None:
     """Run the viewer on localhost until interrupted."""
