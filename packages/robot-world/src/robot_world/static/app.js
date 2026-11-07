@@ -400,7 +400,7 @@ async function loadConfig() {
     ui.world.appendChild(option);
   }
   ui.wheel.value = config.wheel;
-  state.descriptions = config.descriptions;
+  state.descriptions = config.descriptions ?? {};
   showWorldDescription();
 }
 
