@@ -20,9 +20,9 @@ const SKY = 0x87ceeb;
 // side is ROBOT_LENGTH meters; the simulator's robot is a circle of radius 0.3 m.
 const ROBOT_MODEL = "/static/models/round-rover.glb";
 const ROBOT_LENGTH = 0.8;
-// The model's own forward direction after conversion to z-up, as a rotation about z.
-// Change to Math.PI if the rover turns out to drive backwards.
-const ROBOT_MODEL_FORWARD = 0;
+// Rotation about z that turns the model's own front towards +x (heading 0). Found by
+// looking: the rover's front is along its own y after conversion to z-up.
+const ROBOT_MODEL_FORWARD = -Math.PI / 2;
 
 // Camera parameters that match robot_world.camera.Camera's defaults.
 const EYE_HEIGHT = 0.6;
