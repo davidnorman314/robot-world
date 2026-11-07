@@ -9,9 +9,11 @@ from collections.abc import Callable
 
 from robot_world.world import World
 from robot_world.worlds.one_bridge import make_one_bridge_world
+from robot_world.worlds.three_bridges import make_three_bridges_world
 
 WORLDS: dict[str, Callable[[int], World]] = {
     "one-bridge": make_one_bridge_world,
+    "three-bridges": make_three_bridges_world,
 }
 
 
