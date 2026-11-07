@@ -90,3 +90,23 @@ def test_bridge_deck_is_wide_enough_to_drive_down_the_middle_with_margin():
     mid_x = bridge.center[0]
     for dy in (-0.8, 0.0, 0.8):
         assert not world.is_blocked(mid_x, bridge.center[1] + dy, 0.3)
+
+
+def test_river_world_has_a_player_facing_description():
+    from robot_world.worlds import world_description
+
+    description = world_description("river")
+    assert "bridge" in description
+    assert "goal" in description
+    assert len(description) < 600
+
+
+def test_unknown_or_undocumented_worlds_have_an_empty_description():
+    from robot_world.worlds import WORLDS, world_description
+
+    WORLDS["blank"] = lambda seed: None
+    try:
+        assert world_description("blank") == ""
+    finally:
+        del WORLDS["blank"]
+    assert world_description("nope") == ""

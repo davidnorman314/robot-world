@@ -113,3 +113,8 @@ def test_model_loader_and_rover_model_are_served(client):
     rover = client.get("/static/models/round-rover.glb")
     assert rover.status_code == 200
     assert rover.content[:4] == b"glTF"
+
+
+def test_config_includes_world_descriptions(client):
+    data = client.get("/api/config").json()
+    assert "bridge" in data["descriptions"]["river"]

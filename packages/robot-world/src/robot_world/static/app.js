@@ -33,6 +33,7 @@ const EYE_ASPECT = 128 / 96;
 const ui = {
   wheel: document.getElementById("wheel"),
   world: document.getElementById("world"),
+  worldDescription: document.getElementById("world-description"),
   seed: document.getElementById("seed"),
   run: document.getElementById("run"),
   status: document.getElementById("status"),
@@ -52,6 +53,7 @@ const ui = {
 };
 
 const state = {
+  descriptions: {}, // world name -> player-facing description
   episode: null, // the JSON from /api/run
   lookImages: [], // decoded <img> per look
   time: 0, // current playback time in simulated seconds
@@ -398,6 +400,12 @@ async function loadConfig() {
     ui.world.appendChild(option);
   }
   ui.wheel.value = config.wheel;
+  state.descriptions = config.descriptions;
+  showWorldDescription();
+}
+
+function showWorldDescription() {
+  ui.worldDescription.textContent = state.descriptions[ui.world.value] ?? "";
 }
 
 async function runEpisode() {
@@ -467,6 +475,7 @@ function showEpisode(episode) {
 // --- wiring ---------------------------------------------------------------------
 
 ui.run.addEventListener("click", runEpisode);
+ui.world.addEventListener("change", showWorldDescription);
 ui.resetView.addEventListener("click", () => state.episode && resetOverview(state.episode.world));
 ui.play.addEventListener("click", () => setPlaying(!state.playing));
 ui.scrubber.addEventListener("input", () => {

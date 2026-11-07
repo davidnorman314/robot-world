@@ -92,3 +92,10 @@ def test_serve_without_a_wheel_opens_the_browser_by_default(monkeypatch):
     monkeypatch.setattr(cli, "serve", lambda *args, **kwargs: calls.append((args, kwargs)))
     assert cli.main(["serve"]) == 0
     assert calls == [((None,), {"world": "river", "port": 8035, "open_browser": True})]
+
+
+def test_worlds_prints_each_description(capsys):
+    cli.main(["worlds"])
+    out = capsys.readouterr().out
+    assert "river" in out
+    assert "bridge" in out

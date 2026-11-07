@@ -2,13 +2,14 @@
 
 import argparse
 import sys
+import textwrap
 from collections.abc import Sequence
 from pathlib import Path
 
 from robot_world.loader import ProgramLoadError, load_program
 from robot_world.remote import run_wheel
 from robot_world.server import serve
-from robot_world.worlds import WORLDS
+from robot_world.worlds import WORLDS, world_description
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -75,6 +76,9 @@ def check_command(args: argparse.Namespace) -> int:
 def worlds_command(args: argparse.Namespace) -> int:
     for name in sorted(WORLDS):
         print(name)
+        description = world_description(name)
+        if description:
+            print(textwrap.indent(textwrap.fill(description, 76), "    "))
     return 0
 
 

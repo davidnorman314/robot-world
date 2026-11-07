@@ -90,6 +90,10 @@
     padding: 8px; max-height: 180px; overflow: auto; display: none;
   }
   .hint { color: var(--muted); font-size: 13px; }
+  #world-description {
+    flex-basis: 100%; margin: 2px 0 0; font-size: 14px; line-height: 1.4;
+    color: var(--text); max-width: 900px;
+  }
 </style>
 <script type="importmap">
 { "imports": { "three": "/static/vendor/three.module.js" } }
@@ -103,6 +107,7 @@
   <label>Seed <input id="seed" type="number" value="1" min="0"></label>
   <button id="run" class="primary">Run</button>
   <span id="status" class="hint"></span>
+  <p id="world-description"></p>
 </header>
 <main>
   <div id="view-column">

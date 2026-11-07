@@ -18,7 +18,7 @@ from pydantic import BaseModel
 
 from robot_world.remote import run_wheel
 from robot_world.serialize import episode_to_dict
-from robot_world.worlds import WORLDS
+from robot_world.worlds import WORLDS, world_description
 
 STATIC = Path(__file__).parent / "static"
 
@@ -52,6 +52,7 @@ def build_app(default_wheel: Path | None = None, default_world: str = "river") -
     def config() -> dict[str, Any]:
         return {
             "worlds": sorted(WORLDS),
+            "descriptions": {name: world_description(name) for name in WORLDS},
             "world": default_world,
             "wheel": str(default_wheel) if default_wheel else "",
         }
