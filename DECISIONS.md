@@ -93,3 +93,16 @@ files live under `static/models/` with their credits in `ATTRIBUTION.md` there, 
 viewer works offline and installs from the repo need nothing else. Models are
 normalised at load time (measured, scaled to robot size, converted to z-up, set on the
 ground) rather than hand-tuned, so swapping a model is a one-line change.
+
+## 15. Solutions for later worlds live in the test suite, not in examples - accepted
+
+`examples/river-bot` is her template and solves one-bridge, so its solution is public
+by design. Each harder world also needs a program that solves it, so the world stays a
+tested regression target, but putting that program in `examples/` would hand her the
+answer. Those solver bots live in `packages/robot-world/tests/bots/` instead. They are
+still in the public repo, just not presented as templates.
+
+## 16. World names describe the puzzle - accepted
+
+Worlds are named for what she has to deal with (`one-bridge`, `three-bridges`), not
+numbered levels, so the names stay meaningful when worlds are added in between.
