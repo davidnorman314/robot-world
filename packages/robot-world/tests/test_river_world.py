@@ -37,8 +37,8 @@ def test_bridge_spans_the_river():
         ]
         assert bridge_rows, f"seed {seed} has no bridge"
         y = bridge_rows[len(bridge_rows) // 2]
-        assert world.terrain_at(left - 0.7, y) is Terrain.LAND  # bridge overhangs the bank by 0.5
-        assert world.terrain_at(right + 0.8, y) is Terrain.LAND
+        assert world.terrain_at(left - 1.7, y) is Terrain.LAND  # the ramp overhangs the bank by 1.5
+        assert world.terrain_at(right + 1.8, y) is Terrain.LAND
         for x in (left, (left + right) / 2, right):
             assert world.terrain_at(x, y) is Terrain.BRIDGE
 
@@ -68,3 +68,22 @@ def test_bridge_has_railings_on_both_sides():
     assert world.is_blocked(mid_x, bridge.y0 - 0.05, 0.1)
     assert world.is_blocked(mid_x, bridge.y1 + 0.05, 0.1)
     assert not world.is_blocked(mid_x, bridge.center[1], 0.3)
+
+
+def test_ramps_on_each_bank_have_no_railings():
+    world = make_river_world(1)
+    bridge = next(p.rect for p in world.patches if p.terrain is Terrain.BRIDGE)
+    left, right = river_columns(world)
+    for x in (bridge.x0 + 0.3, left - 0.3, right + 0.4, bridge.x1 - 0.3):
+        assert world.terrain_at(x, bridge.center[1]) is Terrain.BRIDGE
+        assert not world.is_blocked(x, bridge.y0 + 0.3, 0.3), f"railing on the ramp at x={x}"
+        assert not world.is_blocked(x, bridge.y1 - 0.3, 0.3), f"railing on the ramp at x={x}"
+
+
+def test_bridge_deck_is_wide_enough_to_drive_down_the_middle_with_margin():
+    world = make_river_world(1)
+    bridge = next(p.rect for p in world.patches if p.terrain is Terrain.BRIDGE)
+    assert bridge.height >= 3.0
+    mid_x = bridge.center[0]
+    for dy in (-0.8, 0.0, 0.8):
+        assert not world.is_blocked(mid_x, bridge.center[1] + dy, 0.3)

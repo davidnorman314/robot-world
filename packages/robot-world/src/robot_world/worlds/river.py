@@ -8,7 +8,8 @@ from robot_world.world import Box, Patch, Pose, Rect, Terrain, World
 WIDTH = 24.0
 HEIGHT = 20.0
 RIVER_WIDTH = 3.0
-BRIDGE_WIDTH = 2.0
+BRIDGE_WIDTH = 3.0  # across the deck, north to south
+RAMP_LENGTH = 1.5  # how far the deck continues onto each bank, with no railing
 RAIL_THICKNESS = 0.2
 RAIL_HEIGHT = 0.6
 WALL_THICKNESS = 0.3
@@ -26,7 +27,9 @@ def make_river_world(seed: int) -> World:
     river = Rect(river_x0, 0.0, river_x0 + RIVER_WIDTH, HEIGHT)
 
     bridge_y0 = rng.uniform(3.0, HEIGHT - 3.0 - BRIDGE_WIDTH)
-    bridge = Rect(river.x0 - 0.5, bridge_y0, river.x1 + 0.5, bridge_y0 + BRIDGE_WIDTH)
+    bridge = Rect(
+        river.x0 - RAMP_LENGTH, bridge_y0, river.x1 + RAMP_LENGTH, bridge_y0 + BRIDGE_WIDTH
+    )
 
     goal_x0 = rng.uniform(river.x1 + 3.0, WIDTH - 2.0 - GOAL_SIZE)
     goal_y0 = rng.uniform(2.0, HEIGHT - 2.0 - GOAL_SIZE)
@@ -40,8 +43,8 @@ def make_river_world(seed: int) -> World:
     )
 
     rails = (
-        Rect(bridge.x0, bridge.y0 - RAIL_THICKNESS, bridge.x1, bridge.y0),
-        Rect(bridge.x0, bridge.y1, bridge.x1, bridge.y1 + RAIL_THICKNESS),
+        Rect(river.x0, bridge.y0 - RAIL_THICKNESS, river.x1, bridge.y0),
+        Rect(river.x0, bridge.y1, river.x1, bridge.y1 + RAIL_THICKNESS),
     )
     walls = (
         Rect(0.0, 0.0, WIDTH, WALL_THICKNESS),
