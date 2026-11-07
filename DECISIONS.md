@@ -106,3 +106,13 @@ still in the public repo, just not presented as templates.
 
 Worlds are named for what she has to deal with (`one-bridge`, `three-bridges`), not
 numbered levels, so the names stay meaningful when worlds are added in between.
+
+## 17. Batch runs stream summaries; a failed seed is replayed by running it again - accepted
+
+The "Test many seeds" tab asks `POST /api/batch` for a range of seeds. The server runs
+up to four episodes at a time (each program is its own subprocess anyway) and streams
+one small JSON line per finished episode: seed, outcome, time, messages and error, but
+no frames or pictures. Clicking a seed re-runs just that seed through `POST /api/run`
+rather than fetching a stored recording. That keeps the batch cheap and the server
+stateless, and it is exact because worlds and runs are deterministic for a seed; the
+only caveat is that if the wheel was rebuilt in between, the replay uses the new wheel.

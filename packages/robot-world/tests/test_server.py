@@ -152,3 +152,10 @@ def test_batch_with_a_missing_wheel_is_a_client_error(client, tmp_path, test_wor
         json={"wheel": str(tmp_path / "nope.whl"), "world": "test", "seed": 1, "episodes": 2},
     )
     assert response.status_code == 400
+
+
+def test_index_page_has_the_watch_and_batch_tabs(client):
+    text = client.get("/").text
+    assert 'data-tab="watch"' in text
+    assert 'data-tab="batch"' in text
+    assert 'id="batch-results"' in text

@@ -24,12 +24,13 @@
     display: flex;
     flex-direction: column;
   }
+  [hidden] { display: none !important; }
   header {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
-    padding: 10px 14px;
+    padding: 10px 14px 0;
     background: var(--panel);
     border-bottom: 1px solid var(--border);
   }
@@ -44,12 +45,27 @@
     padding: 6px 10px;
   }
   input#wheel { width: 420px; }
-  input#seed { width: 70px; }
+  input[type="number"] { width: 80px; }
   button { cursor: pointer; }
   button.primary { background: var(--accent); color: #1b1f27; border-color: var(--accent); font-weight: 600; }
   button:disabled { opacity: 0.5; cursor: default; }
   button.active { border-color: var(--accent); color: var(--accent); }
-  main { flex: 1; display: flex; min-height: 0; }
+  #tabs { margin-left: auto; display: flex; gap: 4px; align-self: flex-end; }
+  .tab {
+    background: transparent; border: none; border-bottom: 2px solid transparent;
+    border-radius: 0; color: var(--muted); padding: 8px 14px;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab:hover { color: var(--text); }
+  #world-description {
+    flex-basis: 100%; margin: 0 0 10px; font-size: 14px; line-height: 1.4;
+    color: var(--text); max-width: 900px;
+  }
+  .tab-panel { flex: 1; display: flex; min-height: 0; }
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    padding: 8px 14px; background: var(--panel); border-bottom: 1px solid var(--border);
+  }
   #view-column { flex: 1; display: flex; flex-direction: column; min-width: 0; }
   #view { flex: 1; min-height: 0; position: relative; overflow: hidden; }
   #view canvas { display: block; width: 100% !important; height: 100% !important; }
@@ -90,10 +106,21 @@
     padding: 8px; max-height: 180px; overflow: auto; display: none;
   }
   .hint { color: var(--muted); font-size: 13px; }
-  #world-description {
-    flex-basis: 100%; margin: 2px 0 0; font-size: 14px; line-height: 1.4;
-    color: var(--text); max-width: 900px;
-  }
+  #tab-batch { flex-direction: column; }
+  #batch-summary { margin: 0; padding: 10px 14px; font-size: 14px; }
+  #batch-summary .failed { color: var(--bad); }
+  #batch-table-wrap { flex: 1; overflow: auto; padding: 0 14px 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; position: sticky; top: 0; background: var(--bg); }
+  td { font-variant-numeric: tabular-nums; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: var(--panel); }
+  tr.success td.outcome { color: var(--ok); }
+  tr.failure td.outcome { color: var(--bad); font-weight: 600; }
+  td.details { color: var(--muted); max-width: 600px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.watch { text-align: right; }
+  td.watch button { padding: 3px 10px; font-size: 13px; }
 </style>
 <script type="importmap">
 { "imports": { "three": "/static/vendor/three.module.js" } }
@@ -104,13 +131,19 @@
   <h1>robot-world</h1>
   <label>Wheel <input id="wheel" placeholder="path to a .whl file or its dist folder"></label>
   <label>World <select id="world"></select></label>
-  <label>Seed <input id="seed" type="number" value="1" min="0"></label>
-  <button id="run" class="primary">Run</button>
-  <span id="status" class="hint"></span>
+  <nav id="tabs">
+    <button class="tab active" data-tab="watch">Watch one run</button>
+    <button class="tab" data-tab="batch">Test many seeds</button>
+  </nav>
   <p id="world-description"></p>
 </header>
-<main>
+<main id="tab-watch" class="tab-panel">
   <div id="view-column">
+    <div class="toolbar">
+      <label>Seed <input id="seed" type="number" value="1" min="0"></label>
+      <button id="run" class="primary">Run</button>
+      <span id="status" class="hint"></span>
+    </div>
     <div id="view"><div id="banner">Load a wheel and press Run</div></div>
     <div id="playback">
       <button id="play" disabled>Play</button>
@@ -143,6 +176,25 @@
     <pre id="error"></pre>
   </aside>
 </main>
+<section id="tab-batch" class="tab-panel" hidden>
+  <div class="toolbar">
+    <label>First seed <input id="batch-seed" type="number" value="1" min="0"></label>
+    <label>How many <input id="batch-count" type="number" value="20" min="1" max="1000"></label>
+    <button id="batch-run" class="primary">Run them all</button>
+    <button id="batch-stop" disabled>Stop</button>
+    <label><input id="batch-only-failures" type="checkbox"> Only show failures</label>
+    <span id="batch-status" class="hint"></span>
+  </div>
+  <p id="batch-summary" class="hint">Runs the wheel on many seeds in a row and lists how each one went. Click a row to watch that run.</p>
+  <div id="batch-table-wrap">
+    <table id="batch-table">
+      <thead>
+        <tr><th>Seed</th><th>Outcome</th><th>Time</th><th>Last message, or the error</th><th></th></tr>
+      </thead>
+      <tbody id="batch-results"></tbody>
+    </table>
+  </div>
+</section>
 <script type="module" src="/static/app.js"></script>
 </body>
 </html>

@@ -66,6 +66,12 @@ the program saw at each `look`, and the messages it said. Use the scrubber to go
 to the moment it went wrong. Rebuild the wheel and press Run again to try a change;
 `serve dist` always picks the newest wheel in the folder.
 
+A robot that works on one seed can fail on another, because the bridge, the goal and
+the start move. The **Test many seeds** tab runs the wheel on a range of seeds, several
+at a time, and lists how each one went, with the failed seeds called out. Click a row
+to replay that seed in the Watch tab; worlds and runs are deterministic for a seed, so
+you see the same run the test did.
+
 To run without the browser, for quick checks or for many seeds at once:
 
 ```

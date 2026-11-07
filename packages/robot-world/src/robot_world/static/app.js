@@ -50,6 +50,16 @@ const ui = {
   view: document.getElementById("view"),
   viewButtons: Array.from(document.querySelectorAll(".view-button")),
   resetView: document.getElementById("reset-view"),
+  tabs: Array.from(document.querySelectorAll(".tab")),
+  panels: Array.from(document.querySelectorAll(".tab-panel")),
+  batchSeed: document.getElementById("batch-seed"),
+  batchCount: document.getElementById("batch-count"),
+  batchRun: document.getElementById("batch-run"),
+  batchStop: document.getElementById("batch-stop"),
+  batchOnlyFailures: document.getElementById("batch-only-failures"),
+  batchStatus: document.getElementById("batch-status"),
+  batchSummary: document.getElementById("batch-summary"),
+  batchResults: document.getElementById("batch-results"),
 };
 
 const state = {
@@ -60,6 +70,7 @@ const state = {
   playing: false,
   viewMode: "top",
   lastTick: null,
+  batch: null, // the batch run in progress or last finished, see runBatch
 };
 
 // --- three.js setup -------------------------------------------------------------
@@ -411,6 +422,7 @@ function showWorldDescription() {
 }
 
 async function runEpisode() {
+  if (ui.run.disabled) return; // one at a time
   ui.run.disabled = true;
   ui.status.textContent = "Running...";
   ui.error.style.display = "none";
@@ -474,8 +486,150 @@ function showEpisode(episode) {
   setPlaying(true);
 }
 
+// --- testing many seeds ---------------------------------------------------------
+
+function setTab(name) {
+  for (const tab of ui.tabs) tab.classList.toggle("active", tab.dataset.tab === name);
+  for (const panel of ui.panels) panel.hidden = panel.id !== `tab-${name}`;
+}
+
+async function runBatch() {
+  const controller = new AbortController();
+  const batch = {
+    controller,
+    wheel: ui.wheel.value,
+    world: ui.world.value,
+    first: Number(ui.batchSeed.value),
+    total: Number(ui.batchCount.value),
+    rows: new Map(), // seed -> summary from the server
+  };
+  state.batch = batch;
+  ui.batchResults.innerHTML = "";
+  ui.batchRun.disabled = true;
+  ui.batchStop.disabled = false;
+  ui.batchStatus.textContent = "Running...";
+  showBatchSummary();
+  try {
+    const response = await fetch("/api/batch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        wheel: batch.wheel,
+        world: batch.world,
+        seed: batch.first,
+        episodes: batch.total,
+      }),
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      const detail = (await response.json()).detail ?? response.statusText;
+      throw new Error(typeof detail === "string" ? detail : JSON.stringify(detail));
+    }
+    for await (const summary of ndjsonLines(response.body)) {
+      batch.rows.set(summary.seed, summary);
+      addBatchRow(summary);
+      showBatchSummary();
+    }
+    ui.batchStatus.textContent = "";
+  } catch (error) {
+    ui.batchStatus.textContent =
+      error.name === "AbortError" ? "Stopped." : `Could not run: ${error.message}`;
+  } finally {
+    ui.batchRun.disabled = false;
+    ui.batchStop.disabled = true;
+    showBatchSummary();
+  }
+}
+
+// Yields each line of a newline-delimited JSON stream as it arrives.
+async function* ndjsonLines(body) {
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  while (true) {
+    const { value, done } = await reader.read();
+    buffer += decoder.decode(value ?? new Uint8Array(), { stream: !done });
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+    for (const line of lines) if (line.trim()) yield JSON.parse(line);
+    if (done) return;
+  }
+}
+
+function describeOutcome(summary) {
+  if (summary.error) {
+    const lines = summary.error.trim().split("\n");
+    return lines[lines.length - 1];
+  }
+  return summary.messages.length ? summary.messages[summary.messages.length - 1] : "";
+}
+
+function addBatchRow(summary) {
+  const succeeded = summary.outcome === "success";
+  const row = document.createElement("tr");
+  row.dataset.seed = summary.seed;
+  row.className = succeeded ? "success" : "failure";
+  row.hidden = succeeded && ui.batchOnlyFailures.checked;
+  row.innerHTML =
+    `<td>${summary.seed}</td><td class="outcome"></td><td>${summary.time.toFixed(1)} s</td>` +
+    `<td class="details"></td><td class="watch"><button>Watch</button></td>`;
+  row.querySelector(".outcome").textContent = summary.outcome;
+  const details = row.querySelector(".details");
+  details.textContent = describeOutcome(summary);
+  details.title = summary.error ?? summary.messages.join("\n");
+  row.addEventListener("click", () => watchSeed(summary.seed));
+  // Keep the table in seed order even though results arrive as they finish.
+  const rows = Array.from(ui.batchResults.children);
+  const next = rows.find((other) => Number(other.dataset.seed) > summary.seed);
+  ui.batchResults.insertBefore(row, next ?? null);
+}
+
+function showBatchSummary() {
+  const batch = state.batch;
+  const done = batch.rows.size;
+  const failed = Array.from(batch.rows.values())
+    .filter((summary) => summary.outcome !== "success")
+    .map((summary) => summary.seed)
+    .sort((a, b) => a - b);
+  const progress = done < batch.total ? `${done} of ${batch.total} done so far, ` : `All ${batch.total} done, `;
+  ui.batchSummary.innerHTML = "";
+  ui.batchSummary.appendChild(
+    document.createTextNode(`${progress}${done - failed.length} succeeded. `),
+  );
+  if (failed.length) {
+    const span = document.createElement("span");
+    span.className = "failed";
+    span.textContent = `Failed on seed${failed.length > 1 ? "s" : ""} ${failed.join(", ")}.`;
+    ui.batchSummary.appendChild(span);
+    ui.batchSummary.appendChild(document.createTextNode(" Click a row to watch that run."));
+  }
+}
+
+function applyFailureFilter() {
+  for (const row of ui.batchResults.children) {
+    row.hidden = ui.batchOnlyFailures.checked && row.classList.contains("success");
+  }
+}
+
+// Replay one seed of the batch in the Watch tab. Episodes are deterministic for a
+// seed, so this shows the same run the batch saw (with the same wheel file).
+function watchSeed(seed) {
+  ui.wheel.value = state.batch.wheel;
+  ui.world.value = state.batch.world;
+  showWorldDescription();
+  ui.seed.value = seed;
+  setTab("watch");
+  runEpisode();
+}
+
 // --- wiring ---------------------------------------------------------------------
 
+for (const tab of ui.tabs) {
+  tab.addEventListener("click", () => setTab(tab.dataset.tab));
+}
+ui.batchRun.addEventListener("click", runBatch);
+ui.batchStop.addEventListener("click", () => state.batch?.controller.abort());
+ui.batchOnlyFailures.addEventListener("change", applyFailureFilter);
 ui.run.addEventListener("click", runEpisode);
 ui.world.addEventListener("change", showWorldDescription);
 ui.resetView.addEventListener("click", () => state.episode && resetOverview(state.episode.world));
