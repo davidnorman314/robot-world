@@ -46,8 +46,22 @@ thing, so the program can tell land from water from bridge by comparing colors.
 
 ## Run a robot
 
+Build the wheel in your robot's folder, then open the viewer:
+
 ```
-uv build --wheel                                     # in your robot's folder
+uv build --wheel
+robot-world serve dist
+```
+
+The viewer opens in your browser. Press Run to watch the robot drive, in a top-down,
+chase, first-person or free orbit view. The panel on the right shows the exact picture
+the program saw at each `look`, and the messages it said. Use the scrubber to go back
+to the moment it went wrong. Rebuild the wheel and press Run again to try a change;
+`serve dist` always picks the newest wheel in the folder.
+
+To run without the browser, for quick checks or for many seeds at once:
+
+```
 robot-world run dist/my_robot-0.1.0-py3-none-any.whl --seed 1 --episodes 5
 ```
 
@@ -67,7 +81,8 @@ The repo is a uv workspace:
 
 - `packages/robot-api` is the small package robot programs import.
 - `packages/robot-world` is the simulator: world model, world generators, camera,
-  simulation, wheel loading and the CLI.
+  simulation, wheel loading, the CLI, and the browser viewer (a FastAPI server plus a
+  vanilla three.js page in `static/`, with three.js vendored so there is no Node build).
 - `examples/river-bot` is an example robot that solves the river world.
 
 ## Release

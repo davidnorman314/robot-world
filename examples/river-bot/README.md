@@ -20,7 +20,16 @@ uv build --wheel
 
 That makes a file like `dist/river_bot-0.1.0-py3-none-any.whl`. That file is your robot.
 
-## Run it
+## Watch it
+
+```
+robot-world serve dist
+```
+
+This opens the viewer in your browser. Press Run. After you change the code, run
+`uv build --wheel` again and press Run again.
+
+## Run it without the browser
 
 ```
 robot-world run dist/river_bot-0.1.0-py3-none-any.whl
