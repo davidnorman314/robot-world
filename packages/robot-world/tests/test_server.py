@@ -160,3 +160,10 @@ def test_index_page_has_the_watch_and_batch_tabs(client):
     assert 'data-tab="watch"' in text
     assert 'data-tab="batch"' in text
     assert 'id="batch-results"' in text
+
+
+def test_eye_panel_says_where_its_pictures_come_from(client):
+    """An empty robot's-eye panel must explain itself: it only shows robot.look() pictures."""
+    text = client.get("/").text
+    assert "robot.look()" in text
+    assert 'id="eye-label">Pictures from robot.look() appear here' in text

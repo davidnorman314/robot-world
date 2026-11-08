@@ -327,7 +327,12 @@ function updateEye(frame) {
   if (index < 0) {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, ui.eye.width, ui.eye.height);
-    ui.eyeLabel.textContent = "No picture yet";
+    if (looks.length === 0) {
+      ui.eyeLabel.textContent = "No pictures: this program never called robot.look()";
+    } else {
+      const first = state.episode.frames[looks[0].frame][0];
+      ui.eyeLabel.textContent = `No picture yet; the first look is at ${first.toFixed(1)} s`;
+    }
     return;
   }
   const image = state.lookImages[index];

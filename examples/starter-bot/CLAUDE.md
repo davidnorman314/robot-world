@@ -142,6 +142,8 @@ because the port is in use.
 
 In the viewer: **Run** plays one seed. The scrubber goes back in time. The panel on the
 right shows the exact picture the program saw at each `look` and the messages it said.
+A program that never calls `robot.look()`, like the starter robot, has no pictures there;
+the **Robot camera** view shows the 3D scene from the robot's position either way.
 **Overview**, **Behind robot** and **Robot camera** change the 3D view. The **Test many
 seeds** tab runs lots of seeds, lists the ones that failed, and replays one on click.
 
