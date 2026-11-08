@@ -30,8 +30,9 @@ command with the new tag. Releases are listed on the GitHub tags page.
 
 ## Write a robot
 
-Copy [examples/river-bot](examples/river-bot) and follow its README. In short, a robot
-program is a function:
+Copy [examples/river-bot](examples/river-bot) and follow its README. It includes a
+`CLAUDE.md` that tells Claude Code to help you learn rather than solve the world for
+you. In short, a robot program is a function:
 
 ```python
 from robot_api import Colors, Robot

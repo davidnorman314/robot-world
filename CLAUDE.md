@@ -12,7 +12,9 @@ watches how her robot does, and iterates. Worlds get harder over time as her ski
   the docstrings alone. Changing it is an API change for her code.
 - `packages/robot-world` - `robot_world`, the simulator: world model, world generators,
   camera, simulation, wheel loading, CLI, and (later) the browser viewer.
-- `examples/` - example robot projects; `river-bot` doubles as her template.
+- `examples/` - example robot projects; `river-bot` doubles as her template. Its
+  `CLAUDE.md` is written for Claude Code in *her* project (be a teacher, do not solve
+  the world for her); it is not instructions for working on the simulator.
 - `DECISIONS.md` - design decisions Claude makes that David should review.
 
 ## Commands
