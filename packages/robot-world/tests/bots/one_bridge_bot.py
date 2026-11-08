@@ -1,4 +1,4 @@
-"""A robot that crosses the river by the bridge and drives to the red goal.
+"""Solves one-bridge: cross the river by the bridge and drive to the red goal.
 
 The plan:
 

@@ -74,11 +74,13 @@ Hatchling refuses a direct git URL in `project.dependencies`. The template decla
 plain `robot-api` dependency and points `[tool.uv.sources]` at the repo's
 `packages/robot-api` subdirectory, pinned to a release tag.
 
-## 12. The example robot is a regression test for the world - accepted
+## 12. Every world has a solver bot as a regression test - accepted (amended by 19)
 
-`test_example_river_bot.py` runs the example on 20 seeds in-process (a 200-seed sweep
-passed when it was written). If a world change breaks it, the world has become harder,
-which should be a deliberate curriculum step, not an accident.
+Each world has a program that solves it, run on 20 seeds in-process (a 200-seed sweep
+passed when each was written). If a world change breaks it, the world has become harder,
+which should be a deliberate curriculum step, not an accident. Originally the one-bridge
+solver was the example robot; since decision 19 it lives with the others in
+`packages/robot-world/tests/bots/`.
 
 ## 13. Releases are git tags, no PyPI - accepted
 
@@ -94,13 +96,13 @@ viewer works offline and installs from the repo need nothing else. Models are
 normalised at load time (measured, scaled to robot size, converted to z-up, set on the
 ground) rather than hand-tuned, so swapping a model is a one-line change.
 
-## 15. Solutions for later worlds live in the test suite, not in examples - accepted
+## 15. Solutions live in the test suite, not in examples - accepted (extended by 19)
 
-`examples/river-bot` is her template and solves one-bridge, so its solution is public
-by design. Each harder world also needs a program that solves it, so the world stays a
-tested regression target, but putting that program in `examples/` would hand her the
-answer. Those solver bots live in `packages/robot-world/tests/bots/` instead. They are
-still in the public repo, just not presented as templates.
+Each world needs a program that solves it, so the world stays a tested regression
+target, but putting that program in `examples/` would hand her the answer. Solver bots
+live in `packages/robot-world/tests/bots/` instead. They are still in the public repo,
+just not presented as templates. At first the one-bridge solver was the example
+project; decision 19 moved it here too.
 
 ## 16. World names describe the puzzle - accepted
 
@@ -125,3 +127,14 @@ worlds` and the viewer's world menu all use that order, and the default world fo
 `run` and `serve` is whichever comes first, so a new player lands on the easiest world.
 This moved the default from one-bridge to simple-goal; pass `--world one-bridge` or
 pick it in the menu to get the old default.
+
+## 19. The template is a bare starter that drives in a square - accepted
+
+She designs the robot and dictates it to Claude Code, whose `CLAUDE.md` in her project
+forbids it from inventing any part of the plan. A template that already solved
+one-bridge undercut that, so `examples/river-bot` became `examples/starter-bot`: a
+robot that says hello and drives a 10 m square, which ends in the river on about six
+seeds in ten of one-bridge.
+Its test checks only that it runs cleanly and does not solve anything. The old
+river-bot is now `tests/bots/one_bridge_bot.py`, the one-bridge regression test. The
+README's sample robot is the same square, not a goal-finding loop.

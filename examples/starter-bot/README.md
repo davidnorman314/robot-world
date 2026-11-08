@@ -1,7 +1,7 @@
-# river-bot
+# starter-bot
 
-A robot program for [robot-world](../../README.md). It crosses the river by the bridge
-and drives to the red goal. Copy this folder to start your own robot.
+A robot program for [robot-world](../../README.md). All it does is drive in a square,
+which usually ends badly. Copy this folder to start your own robot, and make it do better.
 
 ## Set it up
 
@@ -29,7 +29,7 @@ change the `tag` in `pyproject.toml` to match, then `uv sync` and `uv build --wh
 uv build --wheel
 ```
 
-That makes a file like `dist/river_bot-0.1.0-py3-none-any.whl`. That file is your robot.
+That makes a file like `dist/starter_bot-0.1.0-py3-none-any.whl`. That file is your robot.
 
 ## Watch it
 
@@ -43,9 +43,9 @@ This opens the viewer in your browser. Press Run. After you change the code, run
 ## Run it without the browser
 
 ```
-robot-world run dist/river_bot-0.1.0-py3-none-any.whl
-robot-world run dist/river_bot-0.1.0-py3-none-any.whl --seed 7
-robot-world run dist/river_bot-0.1.0-py3-none-any.whl --episodes 10
+robot-world run dist/starter_bot-0.1.0-py3-none-any.whl
+robot-world run dist/starter_bot-0.1.0-py3-none-any.whl --seed 7
+robot-world run dist/starter_bot-0.1.0-py3-none-any.whl --episodes 10
 ```
 
 Every seed is a slightly different world: the river, the bridge, the goal and the

@@ -30,27 +30,22 @@ command with the new tag. Releases are listed on the GitHub tags page.
 
 ## Write a robot
 
-Copy [examples/river-bot](examples/river-bot) and follow its README. It includes a
+Copy [examples/starter-bot](examples/starter-bot) and follow its README. It includes a
 `CLAUDE.md` that tells Claude Code to help you learn rather than solve the world for
 you. In short, a robot program is a function:
 
 ```python
-from robot_api import Colors, Robot
+from robot_api import Robot
 
 
 def run(robot: Robot) -> None:
-    while True:
-        image = robot.look()
-        goal = image.center(Colors.GOAL)
-        if goal is None:
-            robot.turn(45)
-        else:
-            x, _ = goal
-            robot.turn(-45 * (x - image.width / 2) / (image.width / 2))
-            robot.forward(0.5)
+    robot.say("Hello! I am going to drive in a square.")
+    for side in range(4):
+        robot.forward(10.0)
+        robot.turn(90)
 ```
 
-The robot drives with `forward`, `backward` and `turn`, sees with `look`, and knows
+That one drives in a square and usually ends up in the river. The robot drives with `forward`, `backward` and `turn`, sees with `look`, and knows
 which way it faces with `heading`. The camera image is flat colors, one per kind of
 thing, so the program can tell land from water from bridge by comparing colors.
 
@@ -99,7 +94,8 @@ The repo is a uv workspace:
 - `packages/robot-world` is the simulator: world model, world generators, camera,
   simulation, wheel loading, the CLI, and the browser viewer (a FastAPI server plus a
   vanilla three.js page in `static/`, with three.js vendored so there is no Node build).
-- `examples/river-bot` is an example robot that solves the one-bridge world.
+- `examples/starter-bot` is the template robot project. It only drives in a square; the
+  robots that solve each world live in `packages/robot-world/tests/bots/`.
 
 ## Release
 

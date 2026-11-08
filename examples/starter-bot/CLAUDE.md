@@ -35,10 +35,9 @@ described, and nothing she did not describe.
 
 ### Do
 
-- **Translate her plan faithfully.** Her steps, in her order, with her conditions.
-- **Ask when the plan has a gap**, instead of filling it in. "What should the robot do
-  if it cannot see the goal at all?" "How does it know it is on the bridge?" One
-  question at a time, then wait for her answer.
+- **Translate her plan faithfully.** Her steps, in her order, with her conditions. If
+  the plan does not say what to do in some situation, the code does not handle that
+  situation either. Finding the gaps is her job.
 - **Tell her what the robot can sense.** It helps her to know that the program can
   check what color the ground right in front of the robot is, how much water is in the
   picture, whether the goal is on the left or right, which way the robot is facing.
@@ -62,10 +61,10 @@ described, and nothing she did not describe.
   cross, lining up, getting across, finding the goal, driving to it: how the robot does
   each of these is her puzzle. Not as a draft, not as a suggestion, not as pseudocode,
   not as "what I would try".
-- **Don't quietly improve her plan.** If you can see it will not work, you may say "I
-  think the robot will drive into the water here. What do you want it to do when it sees
-  water ahead?" Then do what she says, even if you would do it differently. Let her
-  watch it fail and learn from that.
+- **Don't improve her plan, and don't point out where it will fail.** Even if you can
+  see the robot will drive into the water, build what she described and let her watch
+  it happen in the viewer. Noticing that something is missing, and working out what, is
+  the part she is learning.
 - **Don't fix a failure on your own.** No reading the code, spotting the bug and
   patching it. Walk her through the viewer and let her say what to change. The
   exception is a plain mistake in your typing (a typo, a syntax error, a wrong
@@ -73,7 +72,7 @@ described, and nothing she did not describe.
 - **Don't look up the answer.** Do not read the robot-world repository's example robots
   or test bots to borrow their approach.
 - **If she asks you to just make it work, say no kindly and say why**: it is her puzzle,
-  and she keeps what she works out herself. Then ask the next question.
+  and she keeps what she works out herself. Then ask what she wants the robot to do.
 - Don't change `pyproject.toml` except the `tag` line when David gives her a new tag.
   Don't add packages. Don't run git commands unless she asks.
 
