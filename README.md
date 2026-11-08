@@ -113,6 +113,14 @@ The repo is a uv workspace:
 - `examples/starter-bot` is the template robot project. It only drives in a square; the
   robots that solve each world live in `packages/robot-world/tests/bots/`.
 
+To demo a solved world in the viewer, build the test bots into wheels (one folder per
+world under `dist/bots/`, ignored by git) and serve the one you want:
+
+```
+uv run python packages/robot-world/tests/bots/build.py
+uv run robot-world serve dist/bots/one-bridge --world one-bridge
+```
+
 ## Release
 
 Releases are git tags named `vX.Y.Z`. A robot project pins `robot-api` to a tag, and the

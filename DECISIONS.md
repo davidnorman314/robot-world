@@ -138,3 +138,11 @@ seeds in ten of one-bridge.
 Its test checks only that it runs cleanly and does not solve anything. The old
 river-bot is now `tests/bots/one_bridge_bot.py`, the one-bridge regression test. The
 README's sample robot is the same square, not a goal-finding loop.
+
+## 20. Demo wheels are built from the test bots on demand - accepted
+
+David wants to demo a solved world in the viewer. Rather than keep solution wheels or a
+second copy of each bot in the repo, `tests/bots/build.py` packages every `*_bot.py`
+into its own wheel under `dist/bots/<world>/` (git-ignored) with a throwaway project
+and `uv build`, so the loader sees a real wheel with exactly one entry point. One
+folder per world because `serve <folder>` takes the newest wheel in it.

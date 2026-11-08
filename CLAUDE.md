@@ -23,6 +23,8 @@ watches how her robot does, and iterates. Worlds get harder over time as her ski
 - `uv run pytest` - all tests.
 - `uv run ruff check . && uv run ruff format .` - lint and format.
 - `uv run robot-world --help` - the simulator CLI.
+- `uv run python packages/robot-world/tests/bots/build.py` - build the test bots into
+  demo wheels under `dist/bots/<world>/` for `robot-world serve`.
 
 If `uv sync` was run before a package's source existed, reinstall it with
 `uv sync --reinstall-package <name>` or imports fail.
