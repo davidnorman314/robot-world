@@ -63,12 +63,16 @@ def make_goal(rng: random.Random, river: Rect) -> tuple[Patch, Box]:
     x0 = rng.uniform(river.x1 + 3.0, WIDTH - 2.0 - GOAL_SIZE)
     y0 = rng.uniform(2.0, HEIGHT - 2.0 - GOAL_SIZE)
     goal = Rect(x0, y0, x0 + GOAL_SIZE, y0 + GOAL_SIZE)
+    return Patch(goal, Terrain.GOAL), make_goal_post(goal)
+
+
+def make_goal_post(goal: Rect) -> Box:
+    """The tall post in the middle of ``goal``: visible from afar, and not solid."""
     cx, cy = goal.center
     half = GOAL_POST_SIZE / 2
-    post = Box(
+    return Box(
         Rect(cx - half, cy - half, cx + half, cy + half), GOAL_POST_HEIGHT, Colors.GOAL, solid=False
     )
-    return Patch(goal, Terrain.GOAL), post
 
 
 def make_start(rng: random.Random, river: Rect) -> Pose:

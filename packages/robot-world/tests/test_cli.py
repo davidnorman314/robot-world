@@ -72,9 +72,11 @@ def test_check_reports_a_bad_wheel(wheel_builder, capsys):
     assert "robot_world.robots" in capsys.readouterr().out
 
 
-def test_worlds_lists_the_available_worlds(capsys):
+def test_worlds_lists_the_available_worlds_easiest_first(capsys):
     assert cli.main(["worlds"]) == 0
-    assert "one-bridge" in capsys.readouterr().out
+    out = capsys.readouterr().out
+    assert "one-bridge" in out
+    assert out.index("simple-goal") < out.index("one-bridge") < out.index("three-bridges")
 
 
 def test_serve_starts_the_viewer_with_the_given_wheel_and_options(monkeypatch, goal_wheel):
@@ -87,11 +89,11 @@ def test_serve_starts_the_viewer_with_the_given_wheel_and_options(monkeypatch, g
     assert calls == [((goal_wheel,), {"world": "one-bridge", "port": 9999, "open_browser": False})]
 
 
-def test_serve_without_a_wheel_opens_the_browser_by_default(monkeypatch):
+def test_serve_without_a_wheel_opens_the_browser_on_the_first_world_by_default(monkeypatch):
     calls = []
     monkeypatch.setattr(cli, "serve", lambda *args, **kwargs: calls.append((args, kwargs)))
     assert cli.main(["serve"]) == 0
-    assert calls == [((None,), {"world": "one-bridge", "port": 8035, "open_browser": True})]
+    assert calls == [((None,), {"world": "simple-goal", "port": 8035, "open_browser": True})]
 
 
 def test_worlds_prints_each_description(capsys):

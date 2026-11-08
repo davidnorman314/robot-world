@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field
 from robot_world.batch import run_batch
 from robot_world.remote import run_wheel
 from robot_world.serialize import episode_summary, episode_to_dict
-from robot_world.worlds import WORLDS, world_description
+from robot_world.worlds import DEFAULT_WORLD, WORLDS, world_description
 
 STATIC = Path(__file__).parent / "static"
 
@@ -48,7 +48,7 @@ class BatchRequest(RunRequest):
     episodes: int = Field(default=20, ge=1, le=1000)
 
 
-def build_app(default_wheel: Path | None = None, default_world: str = "one-bridge") -> FastAPI:
+def build_app(default_wheel: Path | None = None, default_world: str = DEFAULT_WORLD) -> FastAPI:
     app = FastAPI(title="robot-world")
     app.mount("/static", StaticFiles(directory=STATIC), name="static")
 
@@ -59,7 +59,7 @@ def build_app(default_wheel: Path | None = None, default_world: str = "one-bridg
     @app.get("/api/config")
     def config() -> dict[str, Any]:
         return {
-            "worlds": sorted(WORLDS),
+            "worlds": list(WORLDS),
             "descriptions": {name: world_description(name) for name in WORLDS},
             "world": default_world,
             "wheel": str(default_wheel) if default_wheel else "",
@@ -98,7 +98,7 @@ def build_app(default_wheel: Path | None = None, default_world: str = "one-bridg
 
 def serve(
     wheel: Path | None,
-    world: str = "one-bridge",
+    world: str = DEFAULT_WORLD,
     port: int = 8035,
     open_browser: bool = True,
 ) -> None:

@@ -38,8 +38,9 @@ def test_vendored_three_js_is_served(client):
 
 def test_config_reports_worlds_and_default_wheel(client, goal_wheel, test_world):
     data = client.get("/api/config").json()
-    assert "one-bridge" in data["worlds"]
+    assert data["worlds"][:3] == ["simple-goal", "one-bridge", "three-bridges"]
     assert "test" in data["worlds"]
+    assert data["world"] == "simple-goal"
     assert data["wheel"] == str(goal_wheel)
 
 

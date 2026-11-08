@@ -5,8 +5,10 @@ You write the robot's program in Python, build it into a wheel, load it into the
 simulator, and watch how it does. The worlds are randomly generated from a seed, so a
 robot has to cope with the bridge, the goal and its own starting spot moving around.
 
-The worlds so far:
+The worlds so far, easiest first:
 
+- **simple-goal**: a fenced field with nothing in it but the red goal. Turn until you
+  see it, then drive to it.
 - **one-bridge**: a river with a bridge. The robot starts on one bank and has to cross
   the bridge and drive to the red goal on the other bank.
 - **three-bridges**: the same river with three bridges, two of them broken in the

@@ -116,3 +116,12 @@ no frames or pictures. Clicking a seed re-runs just that seed through `POST /api
 rather than fetching a stored recording. That keeps the batch cheap and the server
 stateless, and it is exact because worlds and runs are deterministic for a seed; the
 only caveat is that if the wheel was rebuilt in between, the replay uses the new wheel.
+
+## 18. Worlds are listed easiest first, and the first one is the default - accepted
+
+`WORLDS` is now an ordered curriculum rather than an alphabetical list, with
+`simple-goal` (just a fenced field and the goal) at the front. The CLI, `robot-world
+worlds` and the viewer's world menu all use that order, and the default world for
+`run` and `serve` is whichever comes first, so a new player lands on the easiest world.
+This moved the default from one-bridge to simple-goal; pass `--world one-bridge` or
+pick it in the menu to get the old default.
