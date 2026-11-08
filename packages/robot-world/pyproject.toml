@@ -1,6 +1,6 @@
 [project]
 name = "robot-world"
-version = "0.2.0"
+version = "1.0.0"
 description = "A 3D virtual world where a tracked robot drives around to accomplish goals"
 requires-python = ">=3.12"
 dependencies = [

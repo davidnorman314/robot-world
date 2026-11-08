@@ -393,7 +393,7 @@ wheels = [
 
 [[package]]
 name = "robot-api"
-version = "0.2.0"
+version = "1.0.0"
 source = { editable = "packages/robot-api" }
 dependencies = [
     { name = "numpy" },
@@ -404,7 +404,7 @@ requires-dist = [{ name = "numpy", specifier = ">=2.0" }]
 
 [[package]]
 name = "robot-world"
-version = "0.2.0"
+version = "1.0.0"
 source = { editable = "packages/robot-world" }
 dependencies = [
     { name = "fastapi" },

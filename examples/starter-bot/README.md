@@ -10,10 +10,10 @@ for you; `CLAUDE.md` here is what it follows.
 Install the `robot-world` command from GitHub at the tag David gave you:
 
 ```
-uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
+uv tool install "git+https://github.com/davidnorman314/robot-world.git@v1.0.0#subdirectory=packages/robot-world"
 ```
 
-`pyproject.toml` points at the same release tag (`tag = "v0.2.0"`). Change it only when
+`pyproject.toml` points at the same release tag (`tag = "v1.0.0"`). Change it only when
 he says there is a new one. Then:
 
 ```

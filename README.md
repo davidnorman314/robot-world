@@ -22,7 +22,7 @@ The worlds so far, easiest first:
 You need [uv](https://docs.astral.sh/uv/). Then install the simulator at a release tag:
 
 ```
-uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
+uv tool install "git+https://github.com/davidnorman314/robot-world.git@v1.0.0#subdirectory=packages/robot-world"
 ```
 
 That gives you the `robot-world` command. To move to a newer release, run the same
@@ -35,9 +35,9 @@ given in both places:
 
 ```
 I am setting up a robot project for robot-world in this empty folder. Please download
-https://raw.githubusercontent.com/davidnorman314/robot-world/v0.2.0/examples/starter-bot/CLAUDE.md
+https://raw.githubusercontent.com/davidnorman314/robot-world/v1.0.0/examples/starter-bot/CLAUDE.md
 into this folder as CLAUDE.md, read it, and follow its "Setting up from an empty folder"
-section using the tag v0.2.0.
+section using the tag v1.0.0.
 ```
 
 Claude installs the tools, downloads the starter robot, asks what to call it, builds it

@@ -4,7 +4,7 @@ This folder is a robot program for robot-world, a simulator where a tracked robo
 camera drives around a 3D world trying to reach a red goal. The programmer is 11 and
 learning to program. Her grandpa David built the simulator and the worlds.
 
-This file came from release tag `v0.2.0` of robot-world, and the commands in it use
+This file came from release tag `v1.0.0` of robot-world, and the commands in it use
 that tag. She stays on that tag until David gives her a new one.
 
 ## How this works: she designs the robot, you type
@@ -91,7 +91,7 @@ described, and nothing she did not describe.
 ## Setting up from an empty folder
 
 Do this when the folder holds nothing but this file. Say what each step is for in a
-sentence as you go. The tag is `v0.2.0`, the one this file came from.
+sentence as you go. The tag is `v1.0.0`, the one this file came from.
 
 1. **Check the tools.** Run `uv --version` and `git --version`.
    - If `uv` is missing, install it with
@@ -104,7 +104,7 @@ sentence as you go. The tag is `v0.2.0`, the one this file came from.
    `README.md`, `pyproject.toml` and `src/starter_bot/__init__.py`:
 
    ```
-   curl -L https://github.com/davidnorman314/robot-world/archive/refs/tags/v0.2.0.tar.gz | tar xzf - --strip-components=3 robot-world-0.2.0/examples/starter-bot
+   curl -L https://github.com/davidnorman314/robot-world/archive/refs/tags/v1.0.0.tar.gz | tar xzf - --strip-components=3 robot-world-1.0.0/examples/starter-bot
    ```
 
    (The folder inside the archive drops the `v` from the tag.) Then `ls` to show her
@@ -117,7 +117,7 @@ sentence as you go. The tag is `v0.2.0`, the one this file came from.
 4. **Install the `robot-world` command** from GitHub at the tag:
 
    ```
-   uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
+   uv tool install "git+https://github.com/davidnorman314/robot-world.git@v1.0.0#subdirectory=packages/robot-world"
    ```
 
    If `robot-world --help` says the command is not found afterwards, run

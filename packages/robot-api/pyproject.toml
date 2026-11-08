@@ -1,6 +1,6 @@
 [project]
 name = "robot-api"
-version = "0.2.0"
+version = "1.0.0"
 description = "The API a robot program uses to see and drive in robot-world"
 requires-python = ">=3.12"
 dependencies = ["numpy>=2.0"]
