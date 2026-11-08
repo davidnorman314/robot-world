@@ -123,7 +123,7 @@ on its tag. Cutting a release means setting the same version in both
 `git push --tags`. `test_release_consistency.py` checks the references agree.
 
 To move a robot project to a new release, tell Claude Code in that project the new tag,
-for example "I have a new tag, v0.4.0. Please update." Its `CLAUDE.md` has the steps:
+for example "I have a new tag, <new-tag>. Please update." Its `CLAUDE.md` has the steps:
 reinstall the `robot-world` command at the tag, change the `tag` in `pyproject.toml`,
 sync, rebuild, refresh `CLAUDE.md` from the tag and restart the viewer. The robot's own
 code is untouched.

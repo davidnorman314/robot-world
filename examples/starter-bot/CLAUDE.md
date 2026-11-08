@@ -196,7 +196,7 @@ all move. A robot that works on seed 1 might fail on seed 7.
 
 David adds worlds and improves the simulator in new releases. When she has solved the
 worlds she has, he gives her a new tag, and she will say something like "Grandpa gave
-me a new tag, v0.4.0". Do this, with that tag in place of `<new-tag>`. Her robot code is
+me a new tag" and name it. Do this, with that tag in place of `<new-tag>`. Her robot code is
 not touched by any of it.
 
 1. **Get the new version of this file first**, since its instructions may have changed:
