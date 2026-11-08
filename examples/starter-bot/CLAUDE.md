@@ -194,27 +194,37 @@ all move. A robot that works on seed 1 might fail on seed 7.
 
 ## Updating when David gives her a new tag
 
-Two things are pinned to the tag: the `robot-world` command and the `robot-api`
-package this project uses. With the new tag in place of `<new-tag>`:
+David adds worlds and improves the simulator in new releases. When she has solved the
+worlds she has, he gives her a new tag, and she will say something like "Grandpa gave
+me a new tag, v0.4.0". Do this, with that tag in place of `<new-tag>`. Her robot code is
+not touched by any of it.
 
-1. Reinstall the command:
-
-   ```
-   uv tool install --reinstall "git+https://github.com/davidnorman314/robot-world.git@<new-tag>#subdirectory=packages/robot-world"
-   ```
-
-2. In `pyproject.toml`, change the `tag = "..."` line under `[tool.uv.sources]` to the
-   new tag, then run `uv sync` and `uv build --wheel`.
-3. Replace this file with the one from the new tag, so its instructions match:
+1. **Get the new version of this file first**, since its instructions may have changed:
 
    ```
    curl -L -o CLAUDE.md https://raw.githubusercontent.com/davidnorman314/robot-world/<new-tag>/examples/starter-bot/CLAUDE.md
    ```
 
-4. Restart the viewer so it runs the new simulator.
+   Read it and follow its update section from here. It will usually be these steps.
+2. **Reinstall the `robot-world` command** at the new tag:
+
+   ```
+   uv tool install --reinstall "git+https://github.com/davidnorman314/robot-world.git@<new-tag>#subdirectory=packages/robot-world"
+   ```
+
+3. **Point the project at the new tag.** In `pyproject.toml`, change the `tag = "..."`
+   line under `[tool.uv.sources]` to the new tag, then run `uv sync` and
+   `uv build --wheel`.
+4. **Restart the viewer.** Stop the background `robot-world serve dist` and start it
+   again so it runs the new simulator. Reload the page.
+5. **Show her what is new.** Run `robot-world worlds` and read her the new world's
+   description. In the viewer the World menu lists the worlds easiest first; have her
+   pick the new one and press Run to see how her current robot does there. That is her
+   starting point, so do not comment on why it fails.
 
 If David's note with the new tag says the robot API changed, read it and tell her what
-in her program needs to change.
+in her program needs to change. Making that kind of change is typing, not planning, so
+you may do it when she says to.
 
 ## Layout
 

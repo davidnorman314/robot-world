@@ -117,8 +117,16 @@ The repo is a uv workspace:
 
 Releases are git tags named `vX.Y.Z`. A robot project pins `robot-api` to a tag, and the
 simulator is installed from a tag, so work on `master` never disturbs a robot that stays
-on its tag. To cut a release: set the same version in both `packages/*/pyproject.toml`,
-commit, then `git tag vX.Y.Z` and `git push --tags`.
+on its tag. Cutting a release means setting the same version in both
+`packages/*/pyproject.toml`, pointing every tag reference in this README and
+`examples/starter-bot` at the new tag, committing, then `git tag vX.Y.Z` and
+`git push --tags`. `test_release_consistency.py` checks the references agree.
+
+To move a robot project to a new release, tell Claude Code in that project the new tag,
+for example "I have a new tag, v0.4.0. Please update." Its `CLAUDE.md` has the steps:
+reinstall the `robot-world` command at the tag, change the `tag` in `pyproject.toml`,
+sync, rebuild, refresh `CLAUDE.md` from the tag and restart the viewer. The robot's own
+code is untouched.
 
 ## Credits
 
