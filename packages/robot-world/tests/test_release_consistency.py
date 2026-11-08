@@ -35,6 +35,13 @@ def test_every_tag_reference_names_the_current_release():
         assert found == {tag}, f"{path.relative_to(ROOT)} mentions {sorted(found)}, expected {tag}"
 
 
+def test_setup_tarball_path_names_the_current_release():
+    version = package_version("robot-world")
+    text = TAGGED_FILES[1].read_text(encoding="utf-8")
+    assert f"/archive/refs/tags/v{version}.tar.gz" in text
+    assert f"robot-world-{version}/examples/starter-bot" in text
+
+
 def test_starter_template_pins_robot_api_to_the_current_tag():
     pyproject = tomllib.loads(TAGGED_FILES[3].read_text(encoding="utf-8"))
     source = pyproject["tool"]["uv"]["sources"]["robot-api"]

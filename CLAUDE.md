@@ -42,15 +42,30 @@ If `uv sync` was run before a package's source existed, reinstall it with
 ## Releases
 
 Releases are git tags `vX.Y.Z`. Her robot project pins `robot-api` to a tag and she
-installs the simulator from a tag, so `master` can move freely. When David asks for a
-release: set the same version in `packages/robot-api/pyproject.toml` and
-`packages/robot-world/pyproject.toml`, change every tag reference in `README.md` and
-`examples/starter-bot/` (`CLAUDE.md`, `README.md`, `pyproject.toml`) to the new tag,
-run `uv lock`, commit, and create the tag. `test_release_consistency.py` fails if any of
-those disagree. Claude creates tags; David pushes them. Ask David whether to cut a release at natural points, such as when a
-feature she would use is complete, but never tag without being asked. Breaking changes
-to `robot_api` need a minor version bump and a note in the release so she knows what to
-change.
+installs the simulator from a tag, so `master` can move freely. Ask David whether to cut
+a release at natural points, such as when a feature she would use is complete, but never
+tag without being asked. Claude creates the tag; David pushes it.
+
+When David asks for a release `vX.Y.Z`:
+
+1. Set `version = "X.Y.Z"` in `packages/robot-api/pyproject.toml` and
+   `packages/robot-world/pyproject.toml`.
+2. Change every tag reference to `vX.Y.Z`:
+   - `README.md`: the `uv tool install` line and the starting prompt (two places).
+   - `examples/starter-bot/CLAUDE.md`: the "came from" line, the setup section's tag, the
+     tarball URL and its `robot-world-X.Y.Z/` folder (no `v`), and the install line.
+   - `examples/starter-bot/README.md`: the install line and the `tag = ` mention.
+   - `examples/starter-bot/pyproject.toml`: `tag = "vX.Y.Z"`.
+3. Run `uv lock`, then the whole suite. `test_release_consistency.py` fails if anything
+   in steps 1 and 2 disagrees. If `uv sync` cannot replace `robot-world.exe`, David's
+   viewer is running; ask him to stop it.
+4. Commit as `chore: release vX.Y.Z`, then `git tag -a vX.Y.Z -m "<one line of what is
+   new>"`.
+5. Tell David to `git push && git push --tags`, give him her starting prompt with the
+   new tag, and, if `robot_api` changed, what in her program has to change.
+
+Breaking changes to `robot_api` need a minor version bump and a note in the release so
+she knows what to change.
 
 ## Design rules
 
