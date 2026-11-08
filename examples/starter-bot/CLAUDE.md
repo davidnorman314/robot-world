@@ -4,6 +4,9 @@ This folder is a robot program for robot-world, a simulator where a tracked robo
 camera drives around a 3D world trying to reach a red goal. The programmer is 11 and
 learning to program. Her grandpa David built the simulator and the worlds.
 
+This file came from release tag `v0.2.0` of robot-world, and the commands in it use
+that tag. She stays on that tag until David gives her a new one.
+
 ## How this works: she designs the robot, you type
 
 She does not write the Python herself. She tells you what the robot should do, and you
@@ -17,20 +20,21 @@ described, and nothing she did not describe.
 
 ### A session usually goes like this
 
-1. **Start from her plan, in her words.** Before writing code, ask her to say what the
+1. **Make sure the viewer is running** (see "The viewer" below).
+2. **Start from her plan, in her words.** Before writing code, ask her to say what the
    robot should do, step by step, as if she were telling a friend how to drive it.
    "Turn until you see red, then drive to it" is a plan. "Make it find the goal" is a
    wish; ask how.
-2. **Write her plan down as the shape of the code.** One short function per step,
+3. **Write her plan down as the shape of the code.** One short function per step,
    named with her words (`turn_until_goal_is_in_view`, `drive_to_the_bridge`). Then fill
    each one in, doing what she said and no more.
-3. **Build it and have her run it** in the viewer, or run it yourself and describe the
-   outcome. Then ask what she saw.
-4. **Debug through her eyes.** When the robot did the wrong thing, do not go and read
+4. **Build it** with `uv build --wheel` and have her press Run in the viewer. Then ask
+   what she saw.
+5. **Debug through her eyes.** When the robot did the wrong thing, do not go and read
    the code and fix it. Ask her to find the moment in the viewer: scrub back, look at
    the robot's eye picture, read the messages. Ask what the robot saw and what it should
    have done instead. Then change the plan the way she says.
-5. **Test on more seeds.** Suggest the viewer's **Test many seeds** tab or
+6. **Test on more seeds.** Suggest the viewer's **Test many seeds** tab or
    `robot-world run --episodes`, and let her pick a failed seed to watch.
 
 ### Do
@@ -84,6 +88,63 @@ described, and nothing she did not describe.
 - Short functions with clear names, one step or one question each, in her words.
 - A comment above each function saying what it does, in words an 11-year-old can read.
 
+## Setting up from an empty folder
+
+Do this when the folder holds nothing but this file. Say what each step is for in a
+sentence as you go. The tag is `v0.2.0`, the one this file came from.
+
+1. **Check the tools.** Run `uv --version` and `git --version`.
+   - If `uv` is missing, install it with
+     `curl -LsSf https://astral.sh/uv/install.sh | sh`, then use `~/.local/bin/uv`
+     until she opens a new terminal.
+   - If `git` is missing on a Mac, `git --version` pops up a window offering to install
+     the command line developer tools. Tell her to click Install and wait for it to
+     finish, then run the check again. (The robot-world install below needs git.)
+2. **Download the template** into this folder. It contains this same file plus
+   `README.md`, `pyproject.toml` and `src/starter_bot/__init__.py`:
+
+   ```
+   curl -L https://github.com/davidnorman314/robot-world/archive/refs/tags/v0.2.0.tar.gz | tar xzf - --strip-components=3 robot-world-0.2.0/examples/starter-bot
+   ```
+
+   (The folder inside the archive drops the `v` from the tag.) Then `ls` to show her
+   what arrived.
+3. **Name the robot.** Ask her what to call it. Make a package name from that in
+   lowercase letters and underscores, like `zoomer`, and rename the folder
+   `src/starter_bot` to `src/<package>`. In `pyproject.toml` change three places to
+   match: `name = "<package>"`, the entry point line to `<package> = "<package>:run"`,
+   and `packages = ["src/<package>"]`. Leave the `tag` line alone.
+4. **Install the `robot-world` command** from GitHub at the tag:
+
+   ```
+   uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
+   ```
+
+   If `robot-world --help` says the command is not found afterwards, run
+   `uv tool update-shell` and have her open a new terminal.
+5. **Set up and build the project**: `uv sync`, then `uv build --wheel`. That makes
+   `dist/<package>-0.1.0-py3-none-any.whl`, which is her robot.
+6. **Start the viewer** (next section) and have her press Run to watch the starter
+   robot drive its square. It usually does not end well. That is the point.
+7. **Ask her what she wants the robot to do.** From here on, "How this works" applies.
+
+## The viewer
+
+`robot-world serve dist` runs until it is stopped, so start it as a background command,
+never a normal one, or it will block you and then time out. It opens
+http://127.0.0.1:8035/ in her browser; if nothing opened, tell her to go there. Leave it
+running for the whole session. After each `uv build --wheel` she just presses Run again;
+the viewer always picks the newest wheel in `dist`.
+
+At the start of a session, check whether it is already running by fetching
+http://127.0.0.1:8035/api/config before starting another one. A second copy fails
+because the port is in use.
+
+In the viewer: **Run** plays one seed. The scrubber goes back in time. The panel on the
+right shows the exact picture the program saw at each `look` and the messages it said.
+**Overview**, **Behind robot** and **Robot camera** change the 3D view. The **Test many
+seeds** tab runs lots of seeds, lists the ones that failed, and replays one on click.
+
 ## How the robot works
 
 robot-world calls `run(robot)` once. The episode ends by itself when the robot reaches
@@ -112,49 +173,18 @@ the program tells things apart by comparing colors with the constants in `Colors
 Everything is documented in the installed `robot_api` package. For exact details, read
 its docstrings under `.venv/lib/python3.12/site-packages/robot_api/`.
 
-## Install and update robot-world
-
-robot-world is installed from GitHub at a release tag that David gives her, like
-`v0.2.0`. She stays on that tag until he gives her a new one. Two things are pinned to
-the tag: the `robot-world` command, and the `robot-api` package this project uses.
-
-Install the command the first time, using her tag:
-
-```
-uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
-```
-
-When David gives her a new tag, do both of these with the new tag:
-
-```
-uv tool install --reinstall "git+https://github.com/davidnorman314/robot-world.git@v0.3.0#subdirectory=packages/robot-world"
-```
-
-and change the `tag = "..."` line under `[tool.uv.sources]` in `pyproject.toml` to the
-same tag, then:
-
-```
-uv sync
-uv build --wheel
-```
-
-`robot-world --help` shows the command is installed. If David's note with the new tag
-says the robot API changed, read it and tell her what in her program needs to change.
-
 ## Everyday commands
 
 ```
-uv sync                                  # once, and again when the tag changes
 uv build --wheel                         # after every code change; makes dist/*.whl
-robot-world serve dist                   # the viewer; press Run after each build
+robot-world serve dist                   # the viewer, in the background; press Run after each build
 robot-world run dist/*.whl --seed 7      # one run in the terminal, no browser
 robot-world run dist/*.whl --episodes 10 # ten seeds in a row
 robot-world worlds                       # what each world looks like
 ```
 
 Every seed is a slightly different world: the goal, the robot's start and the bridges
-all move. A robot that works on seed 1 might fail on seed 7. The viewer's **Test many
-seeds** tab runs lots of seeds and lists the ones that failed; clicking one replays it.
+all move. A robot that works on seed 1 might fail on seed 7.
 
 ## The worlds, easiest first
 
@@ -162,8 +192,32 @@ seeds** tab runs lots of seeds and lists the ones that failed; clicking one repl
 - **one-bridge**: a river across the field with one bridge over it.
 - **three-bridges**: three bridges, two of them broken in the middle.
 
+## Updating when David gives her a new tag
+
+Two things are pinned to the tag: the `robot-world` command and the `robot-api`
+package this project uses. With the new tag in place of `<new-tag>`:
+
+1. Reinstall the command:
+
+   ```
+   uv tool install --reinstall "git+https://github.com/davidnorman314/robot-world.git@<new-tag>#subdirectory=packages/robot-world"
+   ```
+
+2. In `pyproject.toml`, change the `tag = "..."` line under `[tool.uv.sources]` to the
+   new tag, then run `uv sync` and `uv build --wheel`.
+3. Replace this file with the one from the new tag, so its instructions match:
+
+   ```
+   curl -L -o CLAUDE.md https://raw.githubusercontent.com/davidnorman314/robot-world/<new-tag>/examples/starter-bot/CLAUDE.md
+   ```
+
+4. Restart the viewer so it runs the new simulator.
+
+If David's note with the new tag says the robot API changed, read it and tell her what
+in her program needs to change.
+
 ## Layout
 
-- `src/<robot name>/__init__.py` holds `run(robot)`. This is her robot.
+- `src/<package>/__init__.py` holds `run(robot)`. This is her robot.
 - `pyproject.toml` names the robot and pins `robot-api` to her tag.
 - `dist/` holds the built wheel. The viewer always picks the newest one.

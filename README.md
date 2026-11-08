@@ -28,11 +28,27 @@ uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#su
 That gives you the `robot-world` command. To move to a newer release, run the same
 command with the new tag. Releases are listed on the GitHub tags page.
 
+## Start a robot project with Claude Code
+
+Make an empty folder, open Claude Code in it, and paste this, with the tag you were
+given in both places:
+
+```
+I am setting up a robot project for robot-world in this empty folder. Please download
+https://raw.githubusercontent.com/davidnorman314/robot-world/v0.2.0/examples/starter-bot/CLAUDE.md
+into this folder as CLAUDE.md, read it, and follow its "Setting up from an empty folder"
+section using the tag v0.2.0.
+```
+
+Claude installs the tools, downloads the starter robot, asks what to call it, builds it
+and starts the viewer. The same `CLAUDE.md` then tells Claude Code how to work with you
+from there: you design the robot and Claude types, and it will not solve the world for
+you. To do it by hand instead, copy [examples/starter-bot](examples/starter-bot) and
+follow its README.
+
 ## Write a robot
 
-Copy [examples/starter-bot](examples/starter-bot) and follow its README. It includes a
-`CLAUDE.md` that tells Claude Code to help you learn rather than solve the world for
-you. In short, a robot program is a function:
+A robot program is a function:
 
 ```python
 from robot_api import Robot

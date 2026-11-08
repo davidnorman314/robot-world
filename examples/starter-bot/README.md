@@ -2,6 +2,8 @@
 
 A robot program for [robot-world](../../README.md). All it does is drive in a square,
 which usually ends badly. Copy this folder to start your own robot, and make it do better.
+The easier way is the Claude Code prompt in the main README, which sets all of this up
+for you; `CLAUDE.md` here is what it follows.
 
 ## Set it up
 
