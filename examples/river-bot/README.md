@@ -5,12 +5,23 @@ and drives to the red goal. Copy this folder to start your own robot.
 
 ## Set it up
 
-`pyproject.toml` points at a release tag of robot-world (`tag = "v0.2.0"`). Use the tag
-David gave you, and change it only when he says there is a new one. Then:
+Install the `robot-world` command from GitHub at the tag David gave you:
+
+```
+uv tool install "git+https://github.com/davidnorman314/robot-world.git@v0.2.0#subdirectory=packages/robot-world"
+```
+
+`pyproject.toml` points at the same release tag (`tag = "v0.2.0"`). Change it only when
+he says there is a new one. Then:
 
 ```
 uv sync
 ```
+
+## Update to a new tag
+
+Run the install command again with the new tag and `--reinstall` added after `install`,
+change the `tag` in `pyproject.toml` to match, then `uv sync` and `uv build --wheel`.
 
 ## Build it
 
